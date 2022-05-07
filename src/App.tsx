@@ -20,7 +20,8 @@ function App() {
   const Person = React.lazy(() => import("./pages/People/person"));
   const Detail = React.lazy(() => import("./pages/Details/details"));
   const Login = React.lazy(() => import("./pages/Login/login"));
-  
+  const PersonDetails = React.lazy(() => import("./pages/People/details"));
+
   return (
     <Router>
       <Layout>
@@ -41,8 +42,15 @@ function App() {
               />
               <Route
                 key="person"
+                exact
                 path={routes.people.self}
                 component={Person}
+              />
+              <Route
+                key="person-details"
+                exact
+                path={routes.people.details}
+                component={PersonDetails}
               />
               <Route
                 key="details-movies"

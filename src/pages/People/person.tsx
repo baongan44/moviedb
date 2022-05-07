@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { category, tmdbApi } from "../../api/api";
 import apiConfig from "../../utils/apiConfig";
 import "./person.scss";
+import PersonCard from "./personCard";
 
 const Person = () => {
   const [person, getPerson] = useState(null as any);
@@ -21,14 +22,7 @@ const Person = () => {
       <div className="container">
         <div className="person-list">
           {person?.map((ele: any, i: number) => (
-            <div key={i} className="person-list-item">
-              <div className="person-list-item__image">
-                <img src={apiConfig.w500Image(ele.profile_path)} alt="img" />
-              </div>
-              <div className="person-list-item__info">
-                <span>{ele.name}</span>
-              </div>
-            </div>
+            <PersonCard key={i} data={ele} id={ele.id}/>
           ))}
         </div>
       </div>
