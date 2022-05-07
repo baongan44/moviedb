@@ -1,0 +1,35 @@
+@use "../../scss/" as *;
+
+.person-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: auto;
+  justify-content: center;
+  &-item {
+    height: 350px;
+    background: #0f151e;
+    backdrop-filter: blur(4px);
+    box-shadow: $box-shadow-2;
+    $border-radius: 10px;
+    border-radius: $border-radius;
+    &__image {
+      height: 280px;
+      width: 250px;
+      & img {
+        height: 100%;
+        width: 100%;
+        border-radius: $border-radius;
+      }
+    }
+    &__info {
+      span {
+        font-size: 16px;
+        font-weight: 600;
+        display: block;
+        padding-left: 10px;
+        white-space: nowrap;
+      }
+    }
+  }
+}
