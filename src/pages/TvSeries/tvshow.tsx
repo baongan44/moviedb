@@ -11,7 +11,7 @@ const Tvshow = () => {
       </PageHeader>
       <div className="container">
         <div className="section mb-3">
-          <MovieGrid category={category.Tvshow} />
+          <MovieGrid category={category.tv} />
         </div>
       </div>
     </>

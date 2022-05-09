@@ -45,25 +45,23 @@ const MovieGrid = (props) => {
   };
   const loadMore = async () => {
     let response = null;
-    if (keyword === undefined) {
+    if (!keyword) {
       const params = {
         page: page + 1,
       };
       switch (props.category) {
         case category.movie:
-          response = await tmdbApi.getMoviesList(movieType.upcoming, {
-            params,
-          });
+          response = await tmdbApi.getMoviesList(movieType.upcoming, params);
           break;
         default:
-          response = await tmdbApi.getTvList(tvType.popular, { params });
+          response = await tmdbApi.getTvList(tvType.popular, params);
       }
     } else {
       const params = {
         page: page + 1,
         query: keyword,
       };
-      response = await tmdbApi.search(props.category, { params });
+      response = await tmdbApi.search(props.category, params);
     }
     setItems([...items, ...response.results]);
     setPage(page + 1);
@@ -80,14 +78,14 @@ const MovieGrid = (props) => {
             <MovieCard category={props.category} item={item} key={i} />
           ))}
         </Col>
+        {page < totalPage ? (
+          <div className="movie-grid__loadmore">
+            <OutlineButton className="small" onClick={loadMore}>
+              Load more
+            </OutlineButton>
+          </div>
+        ) : null}
       </Row>
-      {page < totalPage ? (
-        <div className="movie-grid__loadmore">
-          <OutlineButton className="small" onClick={loadMore}>
-            Load more
-          </OutlineButton>
-        </div>
-      ) : null}
     </div>
   );
 };

@@ -32,6 +32,7 @@ function App() {
               <Route key="movies" exact path={routes.movie} component={Movies} />
               <Route
                 key="tvshow"
+                exact
                 path={routes.tvShow}
                 component={TvShow}
               />

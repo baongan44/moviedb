@@ -132,7 +132,7 @@
     width: 70%;
     padding-left: 2rem;
     position: relative;
-
+    margin-top: 2rem;
     @include mobile {
       width: 100%;
       padding-left: 0;
@@ -143,9 +143,65 @@
     }
 
     .title {
-      font-size: 4rem;
+      font-size: 3rem;
       line-height: 1;
     }
-  }
+    .bio {
+      & span {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      & p {
+        margin-top: 10px;
+      }
+    }
+    .born {
+      display: flex;
+      gap: 50px;
+      & div {
+        align-items: center;
+        display: flex;
+      }
+      & i {
+        font-size: 1.5rem;
+        margin-right: 10px;
+      }
+    }
+    .movies-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .profile-img,
+    .movies {
+      display: flex;
+      gap: 10px;
+      overflow: auto;
+      padding-bottom: 10px;
+      margin-top: 10px;
+      &::-webkit-scrollbar {
+        height: 5px;
+      }
 
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba($color: #a8a7a7, $alpha: 0.4);
+        opacity: 0;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        border-radius: 10px;
+        opacity: 1;
+      }
+      & img {
+        min-width: 150px;
+        height: 200px;
+        border-radius: 5px;
+      }
+    }
+  }
 }

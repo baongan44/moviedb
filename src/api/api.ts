@@ -70,4 +70,12 @@ export const tmdbApi = {
     const res = await apiCall(`${category[cate]}/popular`, "GET");
     return res;
   },
+  movieCreditEachPerson: async (id: string) => {
+    const res = await apiCall(`/person/${id}/combined_credits`, "GET");
+    return res;
+  },
+  getImageEachPerson: async (id: string) => {
+    const res = await apiCall(`/person/${id}/images`, "GET");
+    return res;
+  }, 
 };
