@@ -13,8 +13,11 @@ const routes = {
   }),
   profile: include('/profile/', {
     self: '',
+    favourite: 'favourite',
+    watchlist: 'watchlist',
   }),
   login: '/login',
+
 };
 
 export default routes;

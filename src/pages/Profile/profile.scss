@@ -1,0 +1,88 @@
+@use "../../scss/" as *;
+
+.banner {
+  height: 50vh;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    @include overlay();
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background-image: linear-gradient(to top, $body-bg, rgba($black, 0));
+  }
+}
+.profile {
+  &-header {
+    display: flex;
+    transform: translate(10%, -70%);
+    gap: 50px;
+    align-items: center;
+    &__circle {
+      height: 200px;
+      width: 200px;
+      border-radius: 50%;
+      background: $linear-color-01;
+      position: relative;
+      i {
+        position: absolute;
+        font-size: 5rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    &__content {
+      h1 {
+        font-weight: 700;
+        font-size: 2.5rem;
+      }
+    }
+    &__option {
+      ul {
+        display: flex;
+        gap: 30px;
+        li {
+          font-size: 1rem;
+          position: relative;
+          cursor: pointer;
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            transition: width 0.5s ease;
+            height: 2px;
+            background-color: $main-color;
+          }
+
+          &.active::after,
+          &:hover::after {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  &-contact {
+    padding: 0 5%;
+    z-index: 2;
+  }
+}

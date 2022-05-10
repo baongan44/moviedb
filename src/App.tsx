@@ -28,7 +28,7 @@ function App() {
         <Suspense fallback={null}>
           <AnimatePresence>
             <Switch>
-              <Route key="home" path={routes.home} component={Home} />
+              <Route key="home" exact path={routes.home} component={Home} />
               <Route key="movies" exact path={routes.movie} component={Movies} />
               <Route
                 key="tvshow"

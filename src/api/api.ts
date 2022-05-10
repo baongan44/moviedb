@@ -78,4 +78,8 @@ export const tmdbApi = {
     const res = await apiCall(`/person/${id}/images`, "GET");
     return res;
   }, 
+  createNewList: async (body: any, params: any) => {
+    const res = await apiCall(`/list`, "POST", body, params);
+    return res;
+  }, 
 };

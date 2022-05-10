@@ -5,7 +5,7 @@ import Header from "../components/Header/header";
 const Layout = ({ children }: { children?: any }) => {
   return (
     <div>
-      <div>
+      <div style={{ position: "relative" }}>
         <Header />
         <div>{children}</div>
       </div>

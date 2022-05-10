@@ -4,6 +4,7 @@ import { category, tmdbApi } from "../../api/api";
 import apiConfig from "../../utils/apiConfig";
 import "./person.scss";
 import PersonCard from "./personCard";
+import { OutlineButton } from "../../components/button/Button";
 
 const Person = () => {
   const [person, getPerson] = useState(null as any);
@@ -24,6 +25,13 @@ const Person = () => {
           {person?.map((ele: any, i: number) => (
             <PersonCard key={i} data={ele} id={ele.id}/>
           ))}
+          {/* {page < totalPage ? ( */}
+          <div className="person-list__loadmore">
+              <OutlineButton className="small">
+                Load more
+              </OutlineButton>
+            </div>
+          {/* ) : null} */}
         </div>
       </div>
     </>

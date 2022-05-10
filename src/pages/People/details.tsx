@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { category, tmdbApi } from "../../api/api";
+import Button from "../../components/button/Button";
 import MovieCard from "../../components/movie-card/MovieCard";
 import apiConfig from "../../utils/apiConfig";
 import "./person.scss";
@@ -84,11 +85,18 @@ const PersonDetails = () => {
             <div className="movies">
               {movies?.map((mov: any, i: any) => (
                 <Link to={`/${mov.media_type}/${mov.id}`}>
-                  <img
-                    key={i}
-                    src={apiConfig.originalImage(mov?.poster_path)}
-                    alt="img"
-                  />
+                  <div className="img">
+                    <img
+                      key={i}
+                      src={apiConfig.originalImage(mov?.poster_path)}
+                      alt="img"
+                    />
+                    <div>
+                      <Button>
+                        <i className="bx bx-play"></i>
+                      </Button>
+                    </div>
+                  </div>
                 </Link>
               ))}
             </div>

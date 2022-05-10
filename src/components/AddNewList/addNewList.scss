@@ -1,0 +1,86 @@
+@use "../../scss/" as *;
+
+.addlist {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba($color: #000000, $alpha: 0.7);
+  z-index: 100;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  &-content {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    &__close {
+      cursor: pointer;
+      display: flex;
+      justify-content: end;
+      i {
+        font-size: 1.5rem;
+        background: rgba(93, 93, 94, 0.507);
+        border-radius: 10px;
+        padding: 3px;
+        transition: ease-in 0.2s;
+        &:hover {
+          background: rgba(144, 144, 146, 0.507);
+        }
+      }
+    }
+    &__title {
+      font-size: 24px;
+      font-weight: 900;
+      background: $linear-color-01;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    &__input {
+      & input,
+      & textarea {
+        width: 100%;
+        background: #333;
+        border-radius: 10px;
+        margin: 10px 0;
+        outline: none;
+        border: none;
+        padding: 20px;
+      }
+      & input {
+        height: 50px;
+      }
+    }
+    &__create {
+      & button {
+        width: 100%;
+        height: 40px;
+        background: $linear-color-01;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      & button:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+  &-success {
+    position: fixed;
+    right: 1%;
+    bottom: 3%;
+    background: #f0f9f4;
+    border: 1px solid #cee6d6;
+    border-radius: 10px;
+    color: #333;
+    padding: 10px 30px 10px 10px;
+    & span {
+      font-weight: 600;
+    }
+  }
+}
