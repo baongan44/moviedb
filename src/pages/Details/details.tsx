@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { tmdbApi } from "../../api/api";
 import MovieList from "../../components/movie-list/MovieList";
@@ -8,16 +8,39 @@ import VideoList from "./videoList";
 import "./details.scss";
 import { Progress } from "antd";
 import styled from "styled-components";
-import { boolean } from "yup";
 
 const Details = () => {
   const { category, id } = useParams<any>();
 
   const [item, setItem] = useState(null as any);
   const [addList, setAddList] = useState<boolean>(false);
-  const [favorite, setFavorite] = useState<boolean>(false);
-  const [watchList, setWatchList] = useState<boolean>(false);
   const [rate, setRate] = useState<boolean>(false);
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
+  const [isWatchList, setIsWatchList] = useState<boolean>(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const params = {
+    session_id: localStorage.getItem("session_id"),
+  };
+  const getStatusCard = useCallback(async () => {
+    const res = await tmdbApi.getStatus(id, category, params);
+    setIsFavourite(res?.favorite);
+    setIsWatchList(res?.watchlist);
+  }, [category, id, params]);
+
+  const addToFavorite = useCallback(async () => {
+    const data = {
+      media_type: category,
+      media_id: id,
+      favorite: !isFavourite,
+    };
+    await tmdbApi.maskAsFavorite(id, params, data);
+    getStatusCard();
+  }, [category, getStatusCard, id, isFavourite, params]);
+
+  useEffect(() => {
+    getStatusCard();
+  }, [getStatusCard]);
+
   useEffect(() => {
     const getDetail = async () => {
       const response = await tmdbApi.detail(category, id, {});
@@ -34,26 +57,24 @@ const Details = () => {
         icon: addList ? "bx bx-list-check" : "bx bx-list-plus",
         color: "",
         onClick: () => {
-          setAddList(!addList)
+          setAddList(!addList);
         },
         dropdown: "",
       },
       {
         name: "Add To Favorite",
-        icon: favorite ? "bx bxs-heart" : "bx bx-heart",
-        color: favorite ? "rgb(239,71,182)" : "unset",
+        icon: isFavourite ? "bx bxs-heart" : "bx bx-heart",
+        color: isFavourite ? "rgb(239,71,182)" : "unset",
         onClick: () => {
-          setFavorite(!favorite)
+          addToFavorite();
         },
         dropdown: "",
       },
       {
         name: "Add To Watchlist",
-        icon: watchList ? "bx bxs-bookmark" : "bx bxs-bookmark",
-        color: watchList ? "rgb(207,49,49)" : "unset",
-        onClick: () => {
-          setWatchList(!watchList)
-        },
+        icon: isWatchList ? "bx bxs-bookmark" : "bx bxs-bookmark",
+        color: isWatchList ? "rgb(207,49,49)" : "unset",
+        onClick: () => {},
         dropdown: "",
       },
       {
@@ -61,12 +82,12 @@ const Details = () => {
         icon: rate ? "bx bxs-star" : "bx bx-star",
         color: rate ? "rgb(238,196,7)" : "unset",
         onClick: () => {
-          setRate(!rate)
+          setRate(!rate);
         },
         dropdown: "",
       },
     ];
-  }, [addList, favorite, rate, watchList]);
+  }, [addList, isFavourite, isWatchList, rate]);
   return (
     <>
       {item && (
@@ -121,7 +142,7 @@ const Details = () => {
                       className="lists-action__item"
                       onClick={ele.onClick}
                     >
-                      <i className={ele.icon} style={{color: ele.color}}></i>
+                      <i className={ele.icon} style={{ color: ele.color }}></i>
                     </div>
                   ))}
                 </div>

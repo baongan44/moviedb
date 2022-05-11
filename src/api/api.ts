@@ -77,9 +77,40 @@ export const tmdbApi = {
   getImageEachPerson: async (id: string) => {
     const res = await apiCall(`/person/${id}/images`, "GET");
     return res;
-  }, 
+  },
   createNewList: async (body: any, params: any) => {
     const res = await apiCall(`/list`, "POST", body, params);
     return res;
-  }, 
+  },
+  getAccount: async (params: any) => {
+    const res = await apiCall(`/account`, "GET", undefined, params);
+    return res;
+  },
+  getFavoriteList: async (accountId: any, type: any, params: any) => {
+    const res = await apiCall(
+      `/account/${accountId}/favorite/${type}`,
+      "GET",
+      undefined,
+      params
+    );
+    return res;
+  },
+  getStatus: async (id: any, type: string, params: any) => {
+    const res = await apiCall(
+      `/${type}/${id}/account_states`,
+      "GET",
+      undefined,
+      params
+    );
+    return res;
+  },
+  maskAsFavorite: async (account_id: any, params: any, body: any) => {
+    const res = await apiCall(
+      `/account/${account_id}/favorite`,
+      "POST",
+      body,
+      params
+    );
+    return res;
+  },
 };

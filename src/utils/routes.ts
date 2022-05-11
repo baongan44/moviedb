@@ -13,8 +13,9 @@ const routes = {
   }),
   profile: include('/profile/', {
     self: '',
-    favourite: 'favourite',
+    favorite: 'favorite',
     watchlist: 'watchlist',
+    lists: 'my-lists',
   }),
   login: '/login',
 
