@@ -6,11 +6,22 @@ import { tmdbApi } from "../../api/api";
 import apiConfig from "../../utils/apiConfig";
 import "./movie-card.scss";
 
-const MovieCardEdit = ({ data, filter }: { data: any; filter: string }) => {
+const MovieCardEdit = ({
+  data,
+  filter,
+  category,
+  getList,
+}: {
+  data: any;
+  filter: string;
+  category: any;
+  getList:any;
+}) => {
   const type: string = filter === "Movies" ? "movie" : filter.toLowerCase();
   const [isFavourite, setIsFavourite] = useState(false);
   const [isWatchList, setIsWatchList] = useState(false);
   const history = useHistory();
+
   const getStatusCard = useCallback(async () => {
     const params = {
       session_id: localStorage.getItem("session_id"),
@@ -20,15 +31,32 @@ const MovieCardEdit = ({ data, filter }: { data: any; filter: string }) => {
     setIsWatchList(res?.watchlist);
   }, [data?.id, type]);
 
+  const removeToFavorite = useCallback(async () => {
+    const movieData = {
+      media_type: filter === "Movies" ? "movie" : filter?.toLowerCase(),
+      media_id: data?.id,
+      favorite: !isFavourite,
+    };
+    const params = {
+      session_id: localStorage.getItem("session_id"),
+    };
+    await tmdbApi.maskAsStatus(data?.id, category, params, movieData);
+    getStatusCard();
+    getList();
+  }, [category, data?.id, filter, getList, getStatusCard, isFavourite]);
+
   useEffect(() => {
     getStatusCard();
   }, [getStatusCard]);
+  const handleRemove = () => {
+    removeToFavorite();
+  };
   return (
     <div
       className="card-edit"
-      onClick={() => {
-        history.push(`/${type}/${data?.id}`);
-      }}
+      // onClick={() => {
+      //   history.push(`/${type}/${data?.id}`);
+      // }}
     >
       <div className="card-edit__img">
         <img
@@ -80,7 +108,7 @@ const MovieCardEdit = ({ data, filter }: { data: any; filter: string }) => {
             ></i>{" "}
             Add to Watchlist
           </div>
-          <div>
+          <div onClick={handleRemove}>
             <i className="bx bx-x-circle"></i> Remove
           </div>
         </div>

@@ -33,9 +33,19 @@ const Details = () => {
       media_id: id,
       favorite: !isFavourite,
     };
-    await tmdbApi.maskAsFavorite(id, params, data);
+    await tmdbApi.maskAsStatus(id, "favorite", params, data);
     getStatusCard();
   }, [category, getStatusCard, id, isFavourite, params]);
+
+  const addToWatchList = useCallback(async () => {
+    const data = {
+      media_type: category,
+      media_id: id,
+      watchlist: !isWatchList,
+    };
+    await tmdbApi.maskAsStatus(id, "watchlist", params, data);
+    getStatusCard();
+  }, [category, getStatusCard, id, isWatchList, params]);
 
   useEffect(() => {
     getStatusCard();
@@ -74,7 +84,9 @@ const Details = () => {
         name: "Add To Watchlist",
         icon: isWatchList ? "bx bxs-bookmark" : "bx bxs-bookmark",
         color: isWatchList ? "rgb(207,49,49)" : "unset",
-        onClick: () => {},
+        onClick: () => {
+          addToWatchList();
+        },
         dropdown: "",
       },
       {
@@ -87,7 +99,7 @@ const Details = () => {
         dropdown: "",
       },
     ];
-  }, [addList, isFavourite, isWatchList, rate]);
+  }, [addList, addToFavorite, addToWatchList, isFavourite, isWatchList, rate]);
   return (
     <>
       {item && (

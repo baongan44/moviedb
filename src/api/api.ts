@@ -86,9 +86,14 @@ export const tmdbApi = {
     const res = await apiCall(`/account`, "GET", undefined, params);
     return res;
   },
-  getFavoriteList: async (accountId: any, type: any, params: any) => {
+  getStatusList: async (
+    accountId: any,
+    typeList: any,
+    type: any,
+    params: any
+  ) => {
     const res = await apiCall(
-      `/account/${accountId}/favorite/${type}`,
+      `/account/${accountId}/${typeList}/${type}`,
       "GET",
       undefined,
       params
@@ -104,9 +109,14 @@ export const tmdbApi = {
     );
     return res;
   },
-  maskAsFavorite: async (account_id: any, params: any, body: any) => {
+  maskAsStatus: async (
+    account_id: any,
+    typeStatus: any,
+    params: any,
+    body: any
+  ) => {
     const res = await apiCall(
-      `/account/${account_id}/favorite`,
+      `/account/${account_id}/${typeStatus}`,
       "POST",
       body,
       params

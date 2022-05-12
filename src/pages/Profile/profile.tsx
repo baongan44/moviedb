@@ -14,6 +14,7 @@ import {
   useHistory,
   Redirect,
   Link,
+  useLocation,
 } from "react-router-dom";
 import { routes } from "../../utils";
 import WatchList from "../../components/WatchList/WatchList";
@@ -29,24 +30,32 @@ const Profile = () => {
     return [
       {
         name: "Favorite",
-        onClick: () => {
-          history.push(routes.profile.favorite);
-        },
+        title: "My Favorite Lists",
+        path: routes.profile.event.favorite,
       },
       {
         name: "WatchList",
-        onClick: () => {
-          history.push(routes.profile.watchlist);
-        },
+        title: "My WatchList Lists",
+
+        path: routes.profile.event.watchlist,
       },
       {
         name: "My Lists",
-        onClick: () => {
-          history.push(routes.profile.lists);
-        },
+        title: "My Lists",
+        path: routes.profile.event.lists,
       },
     ];
-  }, [history]);
+  }, []);
+  const [filterTitleName, setFilterTitleName] = useState(
+    profileList[0].name as any
+  );
+  const filterList = useMemo(() => {
+    return ["Movies", "Tv"];
+  }, []);
+  const [filter, setFilter] = useState(filterList[0] as string);
+  const [openFilter, setOpenFilter] = useState(false);
+  const { pathname } = useLocation();
+  const active = profileList.findIndex((e) => e.path === pathname);
   const getAccount = useCallback(async () => {
     const params = {
       session_id: localStorage.getItem("session_id"),
@@ -55,11 +64,17 @@ const Profile = () => {
     localStorage.setItem("account_id", res?.id);
     setData(res);
   }, []);
-
+  const handleFilter = (event: string) => {
+    setFilter(event);
+    setOpenFilter(!openFilter);
+  };
   useEffect(() => {
     getAccount();
   }, [getAccount]);
 
+  const handleProfileList = (event: string) => {
+    setFilterTitleName(event);
+  };
   return (
     <div className="profile">
       <div
@@ -78,8 +93,14 @@ const Profile = () => {
             <div className="profile-header__option">
               <ul>
                 {profileList?.map((ele, i) => (
-                  <li key={i} onClick={ele.onClick}>
-                    {ele.name}
+                  <li
+                    key={i}
+                    onClick={() => {
+                      handleProfileList(ele.title);
+                    }}
+                    className={`${i === active ? "active" : ""}`}
+                  >
+                    <Link to={ele.path}>{ele.name}</Link>
                   </li>
                 ))}
               </ul>
@@ -87,29 +108,61 @@ const Profile = () => {
           </div>
         </div>
         <div className="profile-contact">
-          <Suspense fallback={null}>
-            <AnimatePresence>
-              <Router>
-                <Switch>
-                  <Route key="watchlist" exact path={routes.profile.watchlist}>
-                    <WatchList />
+          <div className="filterList">
+            <div className="filterList-title">
+              <h2>{filterTitleName}</h2>
+              <div className="filterList-title-filter">
+                <div className="filterList-title-filter__lists">
+                  <span>
+                    Filter:
+                    <span
+                      className="filter-text"
+                      onClick={() => {
+                        setOpenFilter(!openFilter);
+                      }}
+                    >
+                      {filter}
+                      <i
+                        className="bx bx-chevron-down"
+                        style={{
+                          transform: openFilter
+                            ? "rotateX(180deg)"
+                            : "rotateX(0deg)",
+                        }}
+                      ></i>
+                    </span>
+                  </span>
+                  <div style={{ display: openFilter ? "block" : "none" }}>
+                    <ul>
+                      {filterList?.map((ele, i) => (
+                        <li key={i} onClick={() => handleFilter(ele)}>
+                          {ele}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Suspense fallback={null}>
+              <Switch>
+                <AnimatePresence>
+                  <Route key="favorite" path={routes.profile.event.favorite}>
+                    <Favorite accountId={data?.id} filter={filter} />
                   </Route>
-
-                  <Route key="favorite" exact path={routes.profile.favorite}>
-                    <Favorite accountId={data?.id} />
+                  <Route key="watchlist" path={routes.profile.event.watchlist}>
+                    <WatchList accountId={data?.id} filter={filter} />
                   </Route>
-
-                  <Route key="list" exact path={routes.profile.lists}>
+                  <Route key="lists" path={routes.profile.event.lists}>
                     <MyLists />
                   </Route>
-
-                  <Route key="default" path={routes.profile.self}>
-                    <Redirect to={routes.profile.favorite} />
+                  <Route key="default" exact path={routes.profile.self}>
+                    <Redirect to={routes.profile.event.favorite} />
                   </Route>
-                </Switch>
-              </Router>
-            </AnimatePresence>
-          </Suspense>
+                </AnimatePresence>
+              </Switch>
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

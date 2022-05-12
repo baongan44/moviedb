@@ -38,7 +38,6 @@ function App() {
               />
               <Route
                 key="profile"
-                exact
                 path={routes.profile.self}
                 component={Profile}
               />
