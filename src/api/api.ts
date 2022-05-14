@@ -123,4 +123,62 @@ export const tmdbApi = {
     );
     return res;
   },
+  getCreatedList:  async (accountId: any, params: any) => {
+    const res = await apiCall(
+      `account/${accountId}/lists`,
+      "GET",
+      undefined,
+      params
+    );
+    return res;
+  },
+  clearList: async (
+    listId: any,
+    params: any,
+    body: any,
+  ) => {
+    const res = await apiCall(
+      `/list/${listId}/clear?`,
+      "POST",
+      body,
+      params
+    );
+    return res;
+  },
+  deleteList: async (
+    listId: any,
+    params: any,
+  ) => {
+    const res = await apiCall(
+      `list/${listId}`,
+      "DELETE",
+      undefined,
+      params
+    );
+    return res;
+  },
+  getDetailList: async (
+    listId: any,
+  ) => {
+    const res = await apiCall(
+      `/list/${listId}`,
+      "GET",
+      undefined,
+      undefined
+    );
+    return res;
+  },
+  removieMovieFromMyList: async (
+    listId: any,
+    params: any,
+    body: any,
+  ) => {
+    const res = await apiCall(
+      `list/${listId}/remove_item?`,
+      "POST",
+      body,
+      params
+    );
+    return res;
+  },
 };

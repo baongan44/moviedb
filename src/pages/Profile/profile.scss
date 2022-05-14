@@ -28,6 +28,7 @@
   }
 }
 .profile {
+  margin-bottom: 50px;
   &-header {
     display: flex;
     transform: translate(10%, -70%);
@@ -138,5 +139,9 @@
         }
       }
     }
+  }
+  &-button {
+    display: flex;
+    gap: 10px;
   }
 }

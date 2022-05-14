@@ -9,6 +9,7 @@ import Input from "../input/Input";
 
 import { category, movieType, tvType, tmdbApi } from "../../api/api";
 import { Col, Row } from "antd";
+import GradientBtn from "../button/gradientBtn";
 
 const MovieGrid = (props) => {
   const [items, setItems] = useState([]);
@@ -170,7 +171,9 @@ const MovieSearch = (props) => {
               placeholder="Search..."
               onChange={(e) => setKeyword(e.target.value)}
             />
-            <button onClick={handleSearch}>Search</button>
+          </div>
+          <div style={{marginTop: "20px"}}>
+            <GradientBtn name="Search" onClick={handleSearch} />
           </div>
         </div>
       </div>

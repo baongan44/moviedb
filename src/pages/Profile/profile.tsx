@@ -22,10 +22,14 @@ import MyLists from "../../components/MyLists/MyLists";
 import Favorite from "../../components/Favorite/Favorite";
 import { tmdbApi } from "../../api/api";
 import { AnimatePresence } from "framer-motion";
+import { sessionId } from "../../utils/config";
+import GradientBtn from "../../components/button/gradientBtn";
+import AddNewList from "../../components/AddNewList/AddNewList";
+import DetailList from "../../components/MyLists/DetailList";
 
 const Profile = () => {
   const [data, setData] = useState(null as any);
-  const history = useHistory();
+  const [newList, openPopupNewList] = useState<boolean>(false);
   const profileList = useMemo(() => {
     return [
       {
@@ -36,19 +40,15 @@ const Profile = () => {
       {
         name: "WatchList",
         title: "My WatchList Lists",
-
         path: routes.profile.event.watchlist,
       },
       {
         name: "My Lists",
         title: "My Lists",
-        path: routes.profile.event.lists,
+        path: routes.profile.event.lists.self,
       },
     ];
   }, []);
-  const [filterTitleName, setFilterTitleName] = useState(
-    profileList[0].name as any
-  );
   const filterList = useMemo(() => {
     return ["Movies", "Tv"];
   }, []);
@@ -58,7 +58,7 @@ const Profile = () => {
   const active = profileList.findIndex((e) => e.path === pathname);
   const getAccount = useCallback(async () => {
     const params = {
-      session_id: localStorage.getItem("session_id"),
+      session_id: sessionId,
     };
     const res = await tmdbApi.getAccount(params);
     localStorage.setItem("account_id", res?.id);
@@ -73,8 +73,9 @@ const Profile = () => {
   }, [getAccount]);
 
   const handleProfileList = (event: string) => {
-    setFilterTitleName(event);
+    localStorage.setItem("filter-status", event);
   };
+
   return (
     <div className="profile">
       <div
@@ -110,39 +111,56 @@ const Profile = () => {
         <div className="profile-contact">
           <div className="filterList">
             <div className="filterList-title">
-              <h2>{filterTitleName}</h2>
-              <div className="filterList-title-filter">
-                <div className="filterList-title-filter__lists">
-                  <span>
-                    Filter:
-                    <span
-                      className="filter-text"
-                      onClick={() => {
-                        setOpenFilter(!openFilter);
-                      }}
-                    >
-                      {filter}
-                      <i
-                        className="bx bx-chevron-down"
-                        style={{
-                          transform: openFilter
-                            ? "rotateX(180deg)"
-                            : "rotateX(0deg)",
-                        }}
-                      ></i>
-                    </span>
-                  </span>
-                  <div style={{ display: openFilter ? "block" : "none" }}>
-                    <ul>
-                      {filterList?.map((ele, i) => (
-                        <li key={i} onClick={() => handleFilter(ele)}>
-                          {ele}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <h2>{localStorage.getItem("filter-status")}</h2>
+              {localStorage.getItem("filter-status") === "My Lists" ||
+              localStorage.getItem("filter-status") === "My Favorite Lists" ||
+              localStorage.getItem("filter-status") === "My WatchList Lists" ? (
+                <>
+                  {localStorage.getItem("filter-status") === "My Lists" ? (
+                    <div className="filterList-button">
+                      <GradientBtn
+                        name="Create New List"
+                        onClick={() => openPopupNewList(true)}
+                      />
+                    </div>
+                  ) : (
+                    <div className="filterList-title-filter">
+                      <div className="filterList-title-filter__lists">
+                        <span>
+                          Filter:
+                          <span
+                            className="filter-text"
+                            onClick={() => {
+                              setOpenFilter(!openFilter);
+                            }}
+                          >
+                            {filter}
+                            <i
+                              className="bx bx-chevron-down"
+                              style={{
+                                transform: openFilter
+                                  ? "rotateX(180deg)"
+                                  : "rotateX(0deg)",
+                              }}
+                            ></i>
+                          </span>
+                        </span>
+                        <div style={{ display: openFilter ? "block" : "none" }}>
+                          <ul>
+                            {filterList?.map((ele, i) => (
+                              <li key={i} onClick={() => handleFilter(ele)}>
+                                {ele}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
             </div>
             <Suspense fallback={null}>
               <Switch>
@@ -153,8 +171,19 @@ const Profile = () => {
                   <Route key="watchlist" path={routes.profile.event.watchlist}>
                     <WatchList accountId={data?.id} filter={filter} />
                   </Route>
-                  <Route key="lists" path={routes.profile.event.lists}>
+                  <Route
+                    key="lists"
+                    exact
+                    path={routes.profile.event.lists.self}
+                  >
                     <MyLists />
+                  </Route>
+                  <Route
+                    key="lists-details"
+                    exact
+                    path={routes.profile.event.lists.details}
+                  >
+                    <DetailList />
                   </Route>
                   <Route key="default" exact path={routes.profile.self}>
                     <Redirect to={routes.profile.event.favorite} />
@@ -165,6 +194,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      {newList && <AddNewList onClose={() => openPopupNewList(false)} />}
     </div>
   );
 };

@@ -13,11 +13,14 @@ const routes = {
   }),
   profile: include("/profile", {
     self: "",
-    event: include("event/", {
+    event: include("event", {
       self: "",
       favorite: "favorite",
       watchlist: "watchlist",
-      lists: "my-lists",
+      lists: include("lists", {
+        self: "",
+        details: "details/:id"
+      }),
     }),
   }),
   login: "/login",

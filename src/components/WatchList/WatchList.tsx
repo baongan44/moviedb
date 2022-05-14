@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { tmdbApi } from "../../api/api";
+import { sessionId } from "../../utils/config";
 import MovieCardEdit from "../movie-card/MovieCardEdit";
 
 interface Props {
@@ -11,7 +12,7 @@ const WatchList = ({ accountId, filter }: Props) => {
 
   const getWatchList = useCallback(async () => {
     const params = {
-      session_id: localStorage.getItem("session_id"),
+      session_id: sessionId,
       sort_by: "created_at.asc",
     };
     const res = await tmdbApi.getStatusList(

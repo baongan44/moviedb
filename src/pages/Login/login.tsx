@@ -39,7 +39,6 @@ const Login = () => {
         request_token: requestToken,
       };
       const session = await apiCall("authentication/session/new", "POST", data);
-      console.log(typeof session.session_id, "id");
       localStorage.setItem("login", "CONNECTED");
       localStorage.setItem("session_id", session.session_id);
       history.push(routes.home);

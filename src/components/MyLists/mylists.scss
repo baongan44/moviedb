@@ -1,0 +1,102 @@
+@use "../../scss/" as *;
+
+.my-create-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2% 10%;
+}
+.card-list {
+  width: 300px;
+  height: 300px;
+  padding: 1rem;
+  margin: .5rem;
+  border-radius: 10px;
+  background: rgba(48, 46, 46, 0.3215686275);
+  border: 1px dashed #4c4c4c;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-5%) scale(1.05);
+    transition: ease-in .2s;
+  }
+  &-status {
+    display: flex;
+    justify-content: end;
+    & span {
+      background: rgba($color: #fff, $alpha: 0.3);
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: bold;
+      height: 20px;
+    }
+  }
+  &-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-wrap {
+      &__title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        font-style: italic;
+      }
+
+      &__datetime {
+        color: #999;
+        font-size: 12px;
+      }
+    }
+    &__des {
+      position: absolute;
+      top: 0;
+      right: 0; 
+      left: 0;
+      bottom: 0;
+      background: rgba($color: #ad4d4d, $alpha: 0.7);
+      border-radius: 10px;
+      padding: 10px;
+      object-fit: cover;
+      transform: translate(-100%, -100%);
+      &-delete {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        & button {
+          background: rgba(97, 1, 1, 0.678);
+          border-radius: $border-radius;
+          padding: 1px 5px;
+          color: $white;
+          border: none;
+          font-size: 12px;
+          &:hover {
+            box-shadow: rgb(0 0 0 / 50%) 0px 0px 10px 0px;
+            z-index: 10;
+          }
+        }
+      }
+    }
+  }
+  &:hover .card-list-content__des {
+    transform: translate(0);
+    transition: 0.5s linear;
+    display: block;
+  }
+}
+
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}

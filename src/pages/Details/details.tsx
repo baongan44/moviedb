@@ -8,6 +8,7 @@ import VideoList from "./videoList";
 import "./details.scss";
 import { Progress } from "antd";
 import styled from "styled-components";
+import { sessionId } from "../../utils/config";
 
 const Details = () => {
   const { category, id } = useParams<any>();
@@ -19,7 +20,7 @@ const Details = () => {
   const [isWatchList, setIsWatchList] = useState<boolean>(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const params = {
-    session_id: localStorage.getItem("session_id"),
+    session_id: sessionId,
   };
   const getStatusCard = useCallback(async () => {
     const res = await tmdbApi.getStatus(id, category, params);

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { tmdbApi } from "../../api/api";
+import { sessionId } from "../../utils/config";
 import MovieCardEdit from "../movie-card/MovieCardEdit";
 import "./favorite.scss";
 
@@ -11,7 +12,7 @@ const Favorite = ({ accountId, filter }: Props) => {
   const [favoriteList, setFavoriteList] = useState(null as any);
   const getFavoriteList = useCallback(async () => {
     const params = {
-      session_id: localStorage.getItem("session_id"),
+      session_id: sessionId,
       sort_by: "created_at.asc",
     };
     const res = await tmdbApi.getStatusList(

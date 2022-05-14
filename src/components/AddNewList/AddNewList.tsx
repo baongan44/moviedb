@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { tmdbApi } from "../../api/api";
+import { sessionId } from "../../utils/config";
 import "./addNewList.scss";
 interface Props {
   onClose: any;
@@ -13,7 +14,7 @@ const AddNewList = ({ onClose }: Props) => {
   const createNewList = async () => {
     try {
       const params = {
-        session_id: localStorage.getItem("session_id"),
+        session_id: sessionId,
       };
       const data = {
         name: nameList,

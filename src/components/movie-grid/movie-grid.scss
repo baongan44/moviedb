@@ -103,25 +103,6 @@
           padding: 8px 15px;
           font-size: 14px;
         }
-        & button {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          background: $linear-color-01;
-          margin-top: 20px;
-          padding: 5px;
-          border-radius: 10px;
-          text-transform: uppercase;
-          outline: none;
-          border: none;
-          transition: color 0.15s ease-in-out 0s, background-color 0.15s ease-in-out 0s, border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-          &:hover {
-            background: $linear-color-02;
-          }
-          &:active {
-            background: $linear-color-02;
-          }
-        }
       }
     }
   }

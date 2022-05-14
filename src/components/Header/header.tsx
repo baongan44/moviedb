@@ -40,6 +40,7 @@ const Header = () => {
       display: "My Profile",
       onClick: () => {
         history.push(routes.profile.self);
+        localStorage.setItem("filter-status","My Favorite Lists");
       },
     },
     {

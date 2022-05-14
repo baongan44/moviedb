@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { tmdbApi } from "../../api/api";
 import apiConfig from "../../utils/apiConfig";
+import { sessionId } from "../../utils/config";
 import "./movie-card.scss";
 
 const MovieCardEdit = ({
@@ -11,11 +12,13 @@ const MovieCardEdit = ({
   filter,
   category,
   getList,
+  listId,
 }: {
   data: any;
   filter: string;
-  category: any;
-  getList:any;
+  category?: any;
+  getList: any;
+  listId?:any;
 }) => {
   const type: string = filter === "Movies" ? "movie" : filter.toLowerCase();
   const [isFavourite, setIsFavourite] = useState(false);
@@ -24,7 +27,7 @@ const MovieCardEdit = ({
 
   const getStatusCard = useCallback(async () => {
     const params = {
-      session_id: localStorage.getItem("session_id"),
+      session_id: sessionId,
     };
     const res = await tmdbApi.getStatus(data?.id, type, params);
     setIsFavourite(res?.favorite);
@@ -38,18 +41,49 @@ const MovieCardEdit = ({
       favorite: !isFavourite,
     };
     const params = {
-      session_id: localStorage.getItem("session_id"),
+      session_id: sessionId,
     };
     await tmdbApi.maskAsStatus(data?.id, category, params, movieData);
     getStatusCard();
     getList();
   }, [category, data?.id, filter, getList, getStatusCard, isFavourite]);
 
+  const removeToWatchList = useCallback(async () => {
+    const movieData = {
+      media_type: filter === "Movies" ? "movie" : filter?.toLowerCase(),
+      media_id: data?.id,
+      watchlist: !isWatchList,
+    };
+    const params = {
+      session_id: sessionId,
+    };
+    await tmdbApi.maskAsStatus(data?.id, category, params, movieData);
+    getStatusCard();
+    getList();
+  }, [category, data?.id, filter, getList, getStatusCard, isWatchList]);
+
+  const removeFromList = useCallback(async () => {
+    const listData = {
+      media_id: data?.id,
+    };
+    const params = {
+      session_id: sessionId,
+    };
+    await tmdbApi.removieMovieFromMyList(listId, params, listData);
+    getList();
+  }, [data?.id, getList, listId]);
+
   useEffect(() => {
     getStatusCard();
   }, [getStatusCard]);
   const handleRemove = () => {
-    removeToFavorite();
+    if (category === "watchlist") {
+      removeToWatchList();
+    } else if (category === "favorite") {
+      removeToFavorite();
+    } else {
+      removeFromList();
+    }
   };
   return (
     <div
