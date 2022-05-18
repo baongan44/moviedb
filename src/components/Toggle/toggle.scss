@@ -1,0 +1,26 @@
+@use "../../scss/" as *;
+.toggle {
+  &-wrapper {
+    display: flex;
+    border-radius: 30px;
+    border: 1px solid #999;
+    text-align: center;
+    min-width: 200px;
+    &__first {
+      flex: 0 0 50%;
+      cursor: pointer;
+    }
+    &__second {
+      flex: 0 0 50%;
+      cursor: pointer;
+    }
+    & div {
+      padding: 5px;
+    }
+    .active {
+      border-radius: 30px;
+      background: $linear-color-01;
+    }
+    
+  }
+}

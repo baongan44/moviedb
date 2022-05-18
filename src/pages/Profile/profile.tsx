@@ -26,34 +26,21 @@ import { sessionId } from "../../utils/config";
 import GradientBtn from "../../components/button/gradientBtn";
 import AddNewList from "../../components/AddNewList/AddNewList";
 import DetailList from "../../components/MyLists/DetailList";
+import { profileList } from "../../data/data";
 
 const Profile = () => {
   const [data, setData] = useState(null as any);
   const [newList, openPopupNewList] = useState<boolean>(false);
-  const profileList = useMemo(() => {
-    return [
-      {
-        name: "Favorite",
-        title: "My Favorite Lists",
-        path: routes.profile.event.favorite,
-      },
-      {
-        name: "WatchList",
-        title: "My WatchList Lists",
-        path: routes.profile.event.watchlist,
-      },
-      {
-        name: "My Lists",
-        title: "My Lists",
-        path: routes.profile.event.lists.self,
-      },
-    ];
-  }, []);
   const filterList = useMemo(() => {
     return ["Movies", "Tv"];
   }, []);
+  const addListTime = useMemo(() => {
+    return [{ name: "ASC" }, { name: "DESC" }];
+  }, []);
   const [filter, setFilter] = useState(filterList[0] as string);
+  const [sortBy, setSortBy] = useState(addListTime[0].name as string);
   const [openFilter, setOpenFilter] = useState(false);
+  const [openSortBy, setOpenSortBy] = useState(false);
   const { pathname } = useLocation();
   const active = profileList.findIndex((e) => e.path === pathname);
   const getAccount = useCallback(async () => {
@@ -67,6 +54,10 @@ const Profile = () => {
   const handleFilter = (event: string) => {
     setFilter(event);
     setOpenFilter(!openFilter);
+  };
+  const handleSortBy = (event: string) => {
+    setSortBy(event);
+    setOpenSortBy(!openSortBy);
   };
   useEffect(() => {
     getAccount();
@@ -155,6 +146,40 @@ const Profile = () => {
                           </ul>
                         </div>
                       </div>
+
+                      <div className="filterList-title-filter__lists">
+                        <span>
+                          Sort By:
+                          <span
+                            className="filter-text"
+                            onClick={() => {
+                              setOpenSortBy(!openFilter);
+                            }}
+                          >
+                            {sortBy}
+                            <i
+                              className="bx bx-chevron-down"
+                              style={{
+                                transform: openSortBy
+                                  ? "rotateX(180deg)"
+                                  : "rotateX(0deg)",
+                              }}
+                            ></i>
+                          </span>
+                        </span>
+                        <div style={{ display: openSortBy ? "block" : "none" }}>
+                          <ul>
+                            {addListTime?.map((ele, i) => (
+                              <li
+                                key={i}
+                                onClick={() => handleSortBy(ele?.name)}
+                              >
+                                {ele?.name}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </>
@@ -166,10 +191,18 @@ const Profile = () => {
               <Switch>
                 <AnimatePresence>
                   <Route key="favorite" path={routes.profile.event.favorite}>
-                    <Favorite accountId={data?.id} filter={filter} />
+                    <Favorite
+                      accountId={data?.id}
+                      filter={filter}
+                      sortBy={sortBy}
+                    />
                   </Route>
                   <Route key="watchlist" path={routes.profile.event.watchlist}>
-                    <WatchList accountId={data?.id} filter={filter} />
+                    <WatchList
+                      accountId={data?.id}
+                      filter={filter}
+                      sortBy={sortBy}
+                    />
                   </Route>
                   <Route
                     key="lists"

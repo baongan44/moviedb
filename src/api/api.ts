@@ -4,12 +4,14 @@ export const category: any = {
   movie: "movie",
   tv: "tv",
   person: "person",
+  all: "all",
 };
 
 export const movieType: any = {
   upcoming: "upcoming",
   popular: "popular",
   top_rated: "top_rated",
+  trending: "trending",
 };
 
 export const tvType: any = {
@@ -17,9 +19,12 @@ export const tvType: any = {
   top_rated: "top_rated",
   on_the_air: "on_the_air",
 };
-
+export const timeType: any = {
+  day: "day",
+  week: "week",
+};
 export const tmdbApi = {
-  getMoviesList: async (type: string, params: any) => {
+  getMoviesList: async (type: string, params?: any) => {
     const res = await apiCall(
       `movie/${movieType[type]}`,
       "GET",
@@ -28,8 +33,22 @@ export const tmdbApi = {
     );
     return res;
   },
-  getTvList: async (type: string, params: any) => {
-    const res = await apiCall(`tv/${tvType[type]}`, "GET", undefined, params);
+  getTvList: async (type: string, params?: any) => {
+    const res = await apiCall(
+      `tv/${tvType[type]}`,
+      "GET",
+      undefined,
+      params
+    );
+    return res;
+  },
+  getTrendingTime: async (type: string, time?: string) => {
+    const res = await apiCall(
+      `trending/${category[type]}/${time}`,
+      "GET",
+      undefined,
+      undefined
+    );
     return res;
   },
   getVideos: async (cate: string, id: any) => {
@@ -123,7 +142,7 @@ export const tmdbApi = {
     );
     return res;
   },
-  getCreatedList:  async (accountId: any, params: any) => {
+  getCreatedList: async (accountId: any, params: any) => {
     const res = await apiCall(
       `account/${accountId}/lists`,
       "GET",
@@ -132,53 +151,29 @@ export const tmdbApi = {
     );
     return res;
   },
-  clearList: async (
-    listId: any,
-    params: any,
-    body: any,
-  ) => {
+  clearList: async (listId: any, params: any, body: any) => {
+    const res = await apiCall(`/list/${listId}/clear?`, "POST", body, params);
+    return res;
+  },
+  deleteList: async (listId: any, params: any) => {
+    const res = await apiCall(`list/${listId}`, "DELETE", undefined, params);
+    return res;
+  },
+  getDetailList: async (listId: any) => {
+    const res = await apiCall(`/list/${listId}`, "GET", undefined, undefined);
+    return res;
+  },
+  removieMovieFromMyList: async (listId: any, params: any, body: any) => {
     const res = await apiCall(
-      `/list/${listId}/clear?`,
+      `list/${listId}/remove_item`,
       "POST",
       body,
       params
     );
     return res;
   },
-  deleteList: async (
-    listId: any,
-    params: any,
-  ) => {
-    const res = await apiCall(
-      `list/${listId}`,
-      "DELETE",
-      undefined,
-      params
-    );
-    return res;
-  },
-  getDetailList: async (
-    listId: any,
-  ) => {
-    const res = await apiCall(
-      `/list/${listId}`,
-      "GET",
-      undefined,
-      undefined
-    );
-    return res;
-  },
-  removieMovieFromMyList: async (
-    listId: any,
-    params: any,
-    body: any,
-  ) => {
-    const res = await apiCall(
-      `list/${listId}/remove_item?`,
-      "POST",
-      body,
-      params
-    );
+  addToCreateList: async (listId: any, params: any, body: any) => {
+    const res = await apiCall(`list/${listId}/add_item`, "POST", body, params);
     return res;
   },
 };

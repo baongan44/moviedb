@@ -7,6 +7,7 @@ const Login = () => {
   const [requestToken, setRequestToken] = useState(null as any);
   const [userName, setUserName] = useState(null as any);
   const [passWord, setPassWord] = useState(null as any);
+  const [error, setError] = useState(false);
   const history = useHistory();
   const account = {
     userName: "ntbngan",
@@ -33,8 +34,12 @@ const Login = () => {
         username: userName,
         password: passWord,
         request_token: requestToken,
-      }
-      await apiCall("authentication/token/validate_with_login", "POST", loginAccess);
+      };
+      await apiCall(
+        "authentication/token/validate_with_login",
+        "POST",
+        loginAccess
+      );
       const data = {
         request_token: requestToken,
       };
@@ -42,6 +47,8 @@ const Login = () => {
       localStorage.setItem("login", "CONNECTED");
       localStorage.setItem("session_id", session.session_id);
       history.push(routes.home);
+    } else {
+      setError(true);
     }
   };
   return (
@@ -49,6 +56,9 @@ const Login = () => {
       <div className="login-image"></div>
       <div className="login-content">
         <div className="login-title">Login</div>
+        {error && (
+          <div className="login-error">Username or password incorrect</div>
+        )}
         <div className="login-authen">
           <input
             type="text"

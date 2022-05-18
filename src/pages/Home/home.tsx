@@ -1,55 +1,117 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { category, movieType, tvType } from "../../api/api";
+import { category, movieType, timeType, tvType } from "../../api/api";
 import { OutlineButton } from "../../components/button/Button";
 import HeroSlide from "../../components/hero-slide/HeroSlide";
 import MovieList from "../../components/movie-list/MovieList";
+import Toggle from "../../components/Toggle/toggle";
 import { routes } from "../../utils";
 
-
 const Home = () => {
+  const [popularData, setPopularData] = useState(category.movie);
+  const [topRateData, setTopRateData] = useState(category.movie);
+  const [titlePopular, setTitlePopular] = useState("Movies" as any);
+  const [titleTop, setTitleTop] = useState("Movies" as any);
+  const [routePopular, setRoutePopular] = useState(routes.movie);
+  const [routeTop, setRouteTop] = useState(routes.movie);
+  const [time, setTime] = useState(timeType.day);
+
+  const handleOnToggleTrading = (event: any) => {
+    setTitlePopular(event);
+    switch (event) {
+      case "Movies":
+        setPopularData(category.movie);
+        setRoutePopular(routes.movie);
+        break;
+      case "Tv":
+        setPopularData(category.tv);
+        setRoutePopular(routes.tvShow);
+        break;
+      default:
+        setPopularData(category.movie);
+    }
+  };
+  const handleOnToggleTop = (event: any) => {
+    setTitleTop(event);
+    switch (event) {
+      case "Movies":
+        setTopRateData(category.movie);
+        setRouteTop(routes.movie);
+        break;
+      case "Tv":
+        setTopRateData(category.tv);
+        setRouteTop(routes.tvShow);
+        break;
+      default:
+        setTopRateData(category.movie);
+    }
+  };
+  const handleOnToggleTime = (event: any) => {
+    if (event === "Today") {
+      setTime(timeType.day);
+    } else {
+      setTime(timeType.week);
+    }
+  };
   return (
     <>
       <HeroSlide />
       <div className="container">
         <div className="section mb-3">
           <div className="section__header mb-2">
-            <h2>Trending Movies</h2>
-            <Link to="/movie">
-              <OutlineButton className="small">View more</OutlineButton>
-            </Link>
+            <div style={{ display: "flex", gap: "20px" }}>
+              <h2>Popular {titlePopular}</h2>
+              <Toggle
+                firstName={"Movies"}
+                secondName={"Tv"}
+                handleToggle={handleOnToggleTrading}
+              />
+            </div>
+            <div>
+              <Link to={routePopular}>
+                <OutlineButton className="small">View more</OutlineButton>
+              </Link>
+            </div>
           </div>
-          <MovieList category={category.movie} type={movieType.popular} />
+          <MovieList categoryData={popularData} type={movieType.popular} />
         </div>
 
         <div className="section mb-3">
           <div className="section__header mb-2">
-            <h2>Top Rated Movies</h2>
-            <Link to={routes.movie}>
+            <div style={{ display: "flex", gap: "20px" }}>
+              <h2>Top Rated {titleTop}</h2>
+              <Toggle
+                firstName={"Movies"}
+                secondName={"Tv"}
+                handleToggle={handleOnToggleTop}
+              />
+            </div>
+            <Link to={routeTop}>
               <OutlineButton className="small">View more</OutlineButton>
             </Link>
           </div>
-          <MovieList category={category.movie} type={movieType.top_rated} />
+          <MovieList categoryData={topRateData} type={movieType.top_rated} />
         </div>
 
         <div className="section mb-3">
           <div className="section__header mb-2">
-            <h2>Trending TV</h2>
-            <Link to={routes.tvShow}>
+            <div style={{ display: "flex", gap: "20px" }}>
+              <h2>What's trending</h2>
+              <Toggle
+                firstName={"Today"}
+                secondName={"This week"}
+                handleToggle={handleOnToggleTime}
+              />
+            </div>
+            <Link to={routeTop}>
               <OutlineButton className="small">View more</OutlineButton>
             </Link>
           </div>
-          <MovieList category={category.tv} type={tvType.popular} />
-        </div>
-
-        <div className="section mb-3">
-          <div className="section__header mb-2">
-            <h2>Top Rated TV</h2>
-            <Link to="/tv">
-              <OutlineButton className="small">View more</OutlineButton>
-            </Link>
-          </div>
-          <MovieList category={category.tv} type={tvType.top_rated} />
+          <MovieList
+            categoryData={category.all}
+            type={category.movie}
+            time={time}
+          />
         </div>
       </div>
     </>

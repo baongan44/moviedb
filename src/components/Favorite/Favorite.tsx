@@ -7,13 +7,14 @@ import "./favorite.scss";
 interface Props {
   accountId?: any;
   filter?: any;
+  sortBy?: any;
 }
-const Favorite = ({ accountId, filter }: Props) => {
+const Favorite = ({ accountId, filter, sortBy }: Props) => {
   const [favoriteList, setFavoriteList] = useState(null as any);
   const getFavoriteList = useCallback(async () => {
     const params = {
       session_id: sessionId,
-      sort_by: "created_at.asc",
+      sort_by: sortBy === "DESC" ? "created_at.desc" : "created_at.asc",
     };
     const res = await tmdbApi.getStatusList(
       accountId,
@@ -22,11 +23,11 @@ const Favorite = ({ accountId, filter }: Props) => {
       params
     );
     setFavoriteList(res?.results);
-  }, [accountId, filter]);
+  }, [accountId, filter, sortBy]);
 
   useEffect(() => {
     getFavoriteList();
-  }, [getFavoriteList]);
+  }, [getFavoriteList, sortBy]);
 
   return (
     <div className="favorite-card">

@@ -1,15 +1,18 @@
+import { Alert } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { tmdbApi } from "../../api/api";
 import { sessionId } from "../../utils/config";
+import AlertPopup from "../Alert/Alert";
+import ModalConfirm from "../ModalConfirm/ModalConfirm";
 import "./addNewList.scss";
 interface Props {
   onClose: any;
+  handleSuccess?: any;
 }
 
-const AddNewList = ({ onClose }: Props) => {
+const AddNewList = ({ onClose, handleSuccess }: Props) => {
   const [nameList, setNameList] = useState("" as any);
   const [desList, setDesList] = useState("" as any);
-  const [success, setSuccess] = useState(false);
 
   const createNewList = async () => {
     try {
@@ -21,14 +24,11 @@ const AddNewList = ({ onClose }: Props) => {
         description: desList,
       };
       await tmdbApi.createNewList(data, params);
-      setSuccess(!success);
+      // setSuccess(!success);
     } catch (error) {
       console.log(error);
     }
   };
-  setTimeout(() => {
-    setSuccess(!success);
-  }, 5000);
   const handleChangeName = (event: any) => {
     setNameList(event.target.value);
   };
@@ -36,15 +36,8 @@ const AddNewList = ({ onClose }: Props) => {
   const handleChangeDes = (event: any) => {
     setDesList(event.target.value);
   };
-
   return (
     <div className="addlist">
-      {success && (
-        <div className="addlist-success">
-          <span>Successfully</span>
-          <div>Your new list was created</div>
-        </div>
-      )}
       <div className="addlist-content">
         <div className="addlist-content__close" onClick={onClose}>
           <i className="bx bx-x"></i>

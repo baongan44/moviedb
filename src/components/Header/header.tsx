@@ -4,6 +4,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { routes } from "../../utils";
 import AddNewList from "../AddNewList/AddNewList";
+import AlertPopup from "../Alert/Alert";
 import "./styled.scss";
 
 const headerNav = [
@@ -34,13 +35,12 @@ const Header = () => {
   const history = useHistory();
   const isLogin = localStorage.getItem("login");
   const [newList, openPopupNewList] = useState<boolean>(false);
-
   const Profile = [
     {
       display: "My Profile",
       onClick: () => {
         history.push(routes.profile.self);
-        localStorage.setItem("filter-status","My Favorite Lists");
+        localStorage.setItem("filter-status", "My Favorite Lists");
       },
     },
     {
@@ -83,6 +83,7 @@ const Header = () => {
         !refSelectCurrent.current.contains(e.target)
       ) {
         setOpenProfile(false);
+        
       }
     };
     document.addEventListener("click", checkIfCloseOutside);

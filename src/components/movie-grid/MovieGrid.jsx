@@ -10,6 +10,7 @@ import Input from "../input/Input";
 import { category, movieType, tvType, tmdbApi } from "../../api/api";
 import { Col, Row } from "antd";
 import GradientBtn from "../button/gradientBtn";
+import { filterLists } from "../../data/data";
 
 const MovieGrid = (props) => {
   const [items, setItems] = useState([]);
@@ -17,7 +18,7 @@ const MovieGrid = (props) => {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [keyword, setKeyword] = useState(null);
-
+  const [year, setYear] = useState("");
   useEffect(() => {
     const getList = async () => {
       let response = null;
@@ -33,6 +34,7 @@ const MovieGrid = (props) => {
       } else {
         const keys = {
           query: keyword,
+          year: year,
         };
         response = await tmdbApi.search(props.category, keys);
       }
@@ -40,9 +42,13 @@ const MovieGrid = (props) => {
       setTotalPage(response.total_pages);
     };
     getList();
-  }, [props.category, keyword]);
+  }, [props.category, keyword, year]);
+  
   const handleKeyword = (key) => {
     setKeyword(key);
+  };
+  const handleYear = (year) => {
+    setYear(year);
   };
   const loadMore = async () => {
     let response = null;
@@ -72,7 +78,11 @@ const MovieGrid = (props) => {
     <div>
       <Row className="movie-list-layout">
         <Col className="section mb-3" span={6}>
-          <MovieSearch category={props.category} keyword={handleKeyword} />
+          <MovieSearch
+            category={props.category}
+            keyword={handleKeyword}
+            year={handleYear}
+          />
         </Col>
         <Col className="movie-grid" span={18}>
           {items.map((item, i) => (
@@ -92,26 +102,6 @@ const MovieGrid = (props) => {
 };
 
 const MovieSearch = (props) => {
-  const filterLists = [
-    {
-      title: "Popularity Descending",
-    },
-    {
-      title: "Popularity Ascending",
-    },
-    {
-      title: "Rating Descending",
-    },
-    {
-      title: "Release Date Descending",
-    },
-    {
-      title: "Release Date Ascending",
-    },
-    {
-      title: "Title (A-Z)",
-    },
-  ];
   const [openFilter, setOpenFilter] = useState(false);
   const [keyword, setKeyword] = useState(null);
   const [filter, setFilter] = useState(filterLists[0].title);
@@ -125,6 +115,7 @@ const MovieSearch = (props) => {
   };
   const handleSearch = () => {
     props.keyword(keyword);
+    props.year(filter);
   };
   return (
     <div className="movie-search">
@@ -172,7 +163,7 @@ const MovieSearch = (props) => {
               onChange={(e) => setKeyword(e.target.value)}
             />
           </div>
-          <div style={{marginTop: "20px"}}>
+          <div style={{ marginTop: "20px" }}>
             <GradientBtn name="Search" onClick={handleSearch} />
           </div>
         </div>

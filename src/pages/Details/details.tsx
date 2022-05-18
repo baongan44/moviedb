@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import { tmdbApi } from "../../api/api";
 import MovieList from "../../components/movie-list/MovieList";
@@ -6,18 +12,24 @@ import apiConfig from "../../utils/apiConfig";
 import CastList from "./cardList";
 import VideoList from "./videoList";
 import "./details.scss";
-import { Progress } from "antd";
+import { Alert, Progress } from "antd";
 import styled from "styled-components";
-import { sessionId } from "../../utils/config";
+import { accountId, sessionId } from "../../utils/config";
 
 const Details = () => {
   const { category, id } = useParams<any>();
-
+  const isConnect = localStorage.getItem("login");
   const [item, setItem] = useState(null as any);
-  const [addList, setAddList] = useState<boolean>(false);
   const [rate, setRate] = useState<boolean>(false);
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const [isWatchList, setIsWatchList] = useState<boolean>(false);
+  const [openMyCreateList, setOpenMyCreateList] = useState<boolean>(false);
+  const [openList, setOpenList] = useState<boolean>(false);
+  const [createList, setCreateList] = useState(null as any);
+  const [initValue, setInitValue] = useState("Choose Your List");
+  const [alert, setAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const refSelectCurrent: any = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const params = {
     session_id: sessionId,
@@ -48,6 +60,26 @@ const Details = () => {
     getStatusCard();
   }, [category, getStatusCard, id, isWatchList, params]);
 
+  const getCreateLists = useCallback(async () => {
+    const res = await tmdbApi.getCreatedList(accountId, params);
+    setCreateList(res.results);
+  }, [params]);
+
+  const addToCreateList = useCallback(
+    async (listId: any) => {
+      try {
+        const data = {
+          media_id: id,
+        };
+        await tmdbApi.addToCreateList(listId, params, data);
+        setAlert(true);
+      } catch (error) {
+        setErrorAlert(true);
+      }
+    },
+    [id, params]
+  );
+
   useEffect(() => {
     getStatusCard();
   }, [getStatusCard]);
@@ -61,16 +93,79 @@ const Details = () => {
     getDetail();
   }, [category, id]);
 
+  useEffect(() => {
+    const checkIfCloseOutside = (e: any) => {
+      if (
+        openList &&
+        refSelectCurrent.current &&
+        !refSelectCurrent.current.contains(e.target)
+      ) {
+        setOpenList(false);
+      }
+    };
+    document.addEventListener("click", checkIfCloseOutside);
+    return () => {
+      document.removeEventListener("click", checkIfCloseOutside);
+    };
+  }, [openList]);
+
   const listsAction = useMemo(() => {
     return [
       {
         name: "Add To List",
-        icon: addList ? "bx bx-list-check" : "bx bx-list-plus",
         color: "",
+        icon: "bx bx-list-plus",
+        dropdown: (
+          <div
+            className="dropdown-list"
+            style={{ display: openList ? "block" : "none" }}
+          >
+            <div className="dropdown-list__create">
+              <i className="bx bx-layer-plus"></i> Create new list
+            </div>
+            <div className="dropdown-list__choose">
+              <div
+                className="dropdown-list__choose__init"
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  setOpenMyCreateList(!openMyCreateList);
+                }}
+              >
+                <span>{initValue}</span>{" "}
+                <i
+                  className="bx bx-chevrons-down"
+                  style={{
+                    transform: openMyCreateList
+                      ? "rotateX(180deg)"
+                      : "rotateX(0deg)",
+                  }}
+                ></i>
+              </div>
+              <ul
+                className="dropdown-list__choose__list"
+                style={{ display: openMyCreateList ? "block" : "none" }}
+              >
+                {createList?.map((ele: any, i: number) => (
+                  <li
+                    key={i}
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      setInitValue(ele?.name);
+                      setOpenMyCreateList(!openMyCreateList);
+                      addToCreateList(ele?.id);
+                    }}
+                  >
+                    {ele?.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ),
         onClick: () => {
-          setAddList(!addList);
+          setOpenList(!openList);
+          getCreateLists();
         },
-        dropdown: "",
       },
       {
         name: "Add To Favorite",
@@ -100,7 +195,19 @@ const Details = () => {
         dropdown: "",
       },
     ];
-  }, [addList, addToFavorite, addToWatchList, isFavourite, isWatchList, rate]);
+  }, [
+    addToCreateList,
+    addToFavorite,
+    addToWatchList,
+    createList,
+    getCreateLists,
+    initValue,
+    isFavourite,
+    isWatchList,
+    openList,
+    openMyCreateList,
+    rate,
+  ]);
   return (
     <>
       {item && (
@@ -148,17 +255,24 @@ const Details = () => {
                     }}
                   />
                 </div>
-                <div className="lists-action">
-                  {listsAction.map((ele, i) => (
-                    <div
-                      key={i}
-                      className="lists-action__item"
-                      onClick={ele.onClick}
-                    >
-                      <i className={ele.icon} style={{ color: ele.color }}></i>
-                    </div>
-                  ))}
-                </div>
+                {isConnect === "CONNECTED" && (
+                  <div className="lists-action">
+                    {listsAction.map((ele, i) => (
+                      <div
+                        key={i}
+                        className="lists-action__item"
+                        onClick={ele.onClick}
+                        ref={refSelectCurrent}
+                      >
+                        <i
+                          className={ele.icon}
+                          style={{ color: ele.color }}
+                        ></i>
+                        {ele.dropdown}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <p className="overview">{item.overview}</p>
               <div className="cast">
@@ -177,9 +291,28 @@ const Details = () => {
               <div className="section__header mb-2">
                 <h2>Similar</h2>
               </div>
-              <MovieList category={category} type="similar" id={item.id} />
+              <MovieList categoryData={category} type="similar" id={item.id} />
             </div>
           </div>
+          {alert && (
+            <div style={{ position: "fixed", top: "20%", right: "20px" }}>
+              <Alert
+                message="Successfully"
+                description="Add to your list successful"
+                closable
+              />
+            </div>
+          )}
+          {errorAlert && (
+            <div style={{ position: "fixed", top: "20%", right: "20px" }}>
+              <Alert
+                message="Already Had"
+                description="This item was add to your list already"
+                type="error"
+                closable
+              />
+            </div>
+          )}
         </>
       )}
     </>

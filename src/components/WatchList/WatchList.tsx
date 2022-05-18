@@ -6,14 +6,15 @@ import MovieCardEdit from "../movie-card/MovieCardEdit";
 interface Props {
   accountId?: any;
   filter?: any;
+  sortBy?: any;
 }
-const WatchList = ({ accountId, filter }: Props) => {
+const WatchList = ({ accountId, filter, sortBy }: Props) => {
   const [watchList, setWatchList] = useState(null as any);
 
   const getWatchList = useCallback(async () => {
     const params = {
       session_id: sessionId,
-      sort_by: "created_at.asc",
+      sort_by: sortBy === "DESC" ? "created_at.desc" : "created_at.asc",
     };
     const res = await tmdbApi.getStatusList(
       accountId,
@@ -22,11 +23,11 @@ const WatchList = ({ accountId, filter }: Props) => {
       params
     );
     setWatchList(res?.results);
-  }, [accountId, filter]);
+  }, [accountId, filter, sortBy]);
 
   useEffect(() => {
     getWatchList();
-  }, [getWatchList]);
+  }, [getWatchList, sortBy]);
 
   return (
     <div className="favorite-card">
