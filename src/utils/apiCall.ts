@@ -1,4 +1,3 @@
-import queryString from "query-string";
 import axios, { AxiosRequestConfig, Method } from "axios";
 import apiConfig from "./apiConfig";
 

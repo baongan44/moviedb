@@ -1,24 +1,21 @@
+import { useFormik } from "formik";
+import _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import { apiCall, routes } from "../../utils";
 import "./login.scss";
+import { validationSchema } from "./validate";
 
 const Login = () => {
   const [requestToken, setRequestToken] = useState(null as any);
-  const [userName, setUserName] = useState(null as any);
-  const [passWord, setPassWord] = useState(null as any);
-  const [error, setError] = useState(false);
   const history = useHistory();
   const account = {
     userName: "ntbngan",
     passWord: "milen2604",
   };
-  const handleChangeName = (event: any) => {
-    setUserName(event.target.value);
-  };
-  const handleChangePass = (event: any) => {
-    setPassWord(event.target.value);
-  };
+
   const getRequestToken = useCallback(async () => {
     const request = await apiCall("authentication/token/new", "GET");
     setRequestToken(request?.request_token);
@@ -28,11 +25,44 @@ const Login = () => {
     getRequestToken();
   }, [getRequestToken]);
 
+  const formik = useFormik({
+    initialValues: {
+      userName: "",
+      passWord: "",
+    },
+    validate: async (values) => {
+      const newCreateProjectSchema = validationSchema(values);
+      const errors = {};
+      try {
+        await newCreateProjectSchema.validate(values, {
+          abortEarly: false,
+        });
+      } catch (validationError: any) {
+        _.each(validationError.inner, (error) => {
+          _.set(errors, `${error.path}`, error.message);
+        });
+        return errors;
+      }
+    },
+    onSubmit: (values) => {
+      // eslint-disable-next-line
+      console.log({ values });
+    },
+  });
+  const {
+    handleChange,
+    values: formValues,
+    errors,
+    submitCount,
+    handleSubmit,
+  } = formik;
+
   const handleLogin = async () => {
-    if (userName === account.userName && passWord === account.passWord) {
+    handleSubmit();
+    if (formValues.userName === account.userName && formValues.passWord === account.passWord) {
       const loginAccess = {
-        username: userName,
-        password: passWord,
+        username: formValues.userName ,
+        password: formValues.passWord,
         request_token: requestToken,
       };
       await apiCall(
@@ -48,28 +78,38 @@ const Login = () => {
       localStorage.setItem("session_id", session.session_id);
       history.push(routes.home);
     } else {
-      setError(true);
+      toast.error("Your account are incorrect, please checkout again", {
+        position: "top-right",
+        autoClose: 5000,
+        draggablePercent: 60,
+      });
     }
   };
   return (
     <div className="login">
+      <ToastContainer />
       <div className="login-image"></div>
       <div className="login-content">
         <div className="login-title">Login</div>
-        {error && (
-          <div className="login-error">Username or password incorrect</div>
-        )}
         <div className="login-authen">
           <input
             type="text"
-            placeholder="UserName"
-            onChange={(e) => handleChangeName(e)}
+            value={formValues.userName}
+            name="userName"
+            onChange={handleChange("userName")}
+            placeholder="Enter your username"
+            required
           />
+          {errors && <ErrorMessage>{submitCount ? errors.userName : ""}</ErrorMessage>}
           <input
+            value={formValues.passWord}
+            name="passWord"
+            onChange={handleChange("passWord")}
+            required
             type="password"
-            placeholder="Password"
-            onChange={(e) => handleChangePass(e)}
+            placeholder="Enter your password"
           />
+          {errors && <ErrorMessage>{submitCount ? errors.passWord : ""}</ErrorMessage>}
         </div>
         <div className="login-btn">
           <button onClick={handleLogin}>Login</button>

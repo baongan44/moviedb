@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { category, movieType, timeType, tvType } from "../../api/api";
+import { toast, ToastContainer } from "react-toastify";
+import { category, movieType, timeType } from "../../api/api";
 import { OutlineButton } from "../../components/button/Button";
 import HeroSlide from "../../components/hero-slide/HeroSlide";
 import MovieList from "../../components/movie-list/MovieList";
@@ -53,8 +54,23 @@ const Home = () => {
       setTime(timeType.week);
     }
   };
+  const alert = () => {
+    if (localStorage.getItem("login") === "CONNECTED") {
+      toast.success("Welcom to Milen Movies website", {
+        theme: "dark",
+        position: "top-right",
+        autoClose: 1000,
+        icon: false,
+        draggablePercent: 60,
+      });
+    }
+  };
+  useEffect(() => {
+    alert();
+  }, []);
   return (
     <>
+      <ToastContainer />
       <HeroSlide />
       <div className="container">
         <div className="section mb-3">

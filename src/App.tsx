@@ -10,6 +10,7 @@ import { AnimatePresence } from "framer-motion";
 import { darkTheme, lightTheme, routes } from "./utils";
 import React, { Suspense, useEffect } from "react";
 import 'swiper/swiper.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {

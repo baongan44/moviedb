@@ -1,7 +1,6 @@
 import PageHeader from "../../components/page-header/PageHeader";
 import React, { useCallback, useEffect, useState } from "react";
 import { category, tmdbApi } from "../../api/api";
-import apiConfig from "../../utils/apiConfig";
 import "./person.scss";
 import PersonCard from "./personCard";
 import { OutlineButton } from "../../components/button/Button";
