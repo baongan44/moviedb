@@ -1,7 +1,6 @@
 @use "./scss/" as *;
 @import 'antd/dist/antd.css';
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap");
-
 * {
     padding: 0;
     margin: 0;
@@ -11,11 +10,9 @@
 
 html {
     font-size: 100%;
-
     @include tablet {
         font-size: 80%;
     }
-
     @include mobile {
         font-size: 60%;
     }
@@ -27,7 +24,6 @@ body {
     line-height: 1.5;
     background-color: $body-bg;
     color: $txt-color;
-
     @include mobile {
         margin-bottom: 3rem;
     }
@@ -60,9 +56,15 @@ img {
 iframe {
     border: 0;
 }
-h1,h2,h3,h4,h5 {
+
+h1,
+h2,
+h3,
+h4,
+h5 {
     color: $white;
 }
+
 .container {
     max-width: 1660px;
     margin: auto;
@@ -81,5 +83,10 @@ h1,h2,h3,h4,h5 {
 }
 
 .section__header {
-    @include flex(center, space-between);
+    @include flex(center,
+    space-between);
+}
+
+.Toastify__progress-bar--success {
+    background: $linear-color-01 !important;
 }

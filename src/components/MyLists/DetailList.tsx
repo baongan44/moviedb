@@ -1,11 +1,8 @@
-import { Alert } from "antd";
-import { divide } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { tmdbApi } from "../../api/api";
 import { routes } from "../../utils";
 import { sessionId } from "../../utils/config";
-import AlertPopup from "../Alert/Alert";
 import GradientBtn from "../button/gradientBtn";
 import ModalConfirm from "../ModalConfirm/ModalConfirm";
 import MovieCardEdit from "../movie-card/MovieCardEdit";

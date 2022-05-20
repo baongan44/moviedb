@@ -1,3 +1,4 @@
+import { accountId } from "./../utils/config";
 import { apiCall, routes } from "../utils";
 
 export const category: any = {
@@ -34,12 +35,7 @@ export const tmdbApi = {
     return res;
   },
   getTvList: async (type: string, params?: any) => {
-    const res = await apiCall(
-      `tv/${tvType[type]}`,
-      "GET",
-      undefined,
-      params
-    );
+    const res = await apiCall(`tv/${tvType[type]}`, "GET", undefined, params);
     return res;
   },
   getTrendingTime: async (type: string, time?: string) => {
@@ -174,6 +170,24 @@ export const tmdbApi = {
   },
   addToCreateList: async (listId: any, params: any, body: any) => {
     const res = await apiCall(`list/${listId}/add_item`, "POST", body, params);
+    return res;
+  },
+  getRateMovie: async (type: any, accountId: any, params: any) => {
+    const res = await apiCall(
+      `/account/${accountId}/rated/${type}`,
+      "GET",
+      undefined,
+      params
+    );
+    return res;
+  },
+  setReview: async (type: any, id: any, body: any, params: any) => {
+    const res = await apiCall(
+      `/${type}/${id}/rating`,
+      "POST",
+      body,
+      params
+    );
     return res;
   },
 };

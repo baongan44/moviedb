@@ -8,10 +8,8 @@ import React, {
 import "./profile.scss";
 import bg from "../../assets/footer-bg.jpg";
 import {
-  BrowserRouter as Router,
   Route,
   Switch,
-  useHistory,
   Redirect,
   Link,
   useLocation,

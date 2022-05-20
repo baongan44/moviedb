@@ -12,9 +12,10 @@ import apiConfig from "../../utils/apiConfig";
 import CastList from "./cardList";
 import VideoList from "./videoList";
 import "./details.scss";
-import { Alert, Progress } from "antd";
+import { Alert, Progress, Rate } from "antd";
 import styled from "styled-components";
-import { accountId, sessionId } from "../../utils/config";
+import { accountId, paramsSession } from "../../utils/config";
+import RateStar from "../../components/Rate/RateStar";
 
 const Details = () => {
   const { category, id } = useParams<any>();
@@ -29,16 +30,14 @@ const Details = () => {
   const [initValue, setInitValue] = useState("Choose Your List");
   const [alert, setAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
+
   const refSelectCurrent: any = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const params = {
-    session_id: sessionId,
-  };
   const getStatusCard = useCallback(async () => {
-    const res = await tmdbApi.getStatus(id, category, params);
+    const res = await tmdbApi.getStatus(id, category, paramsSession);
     setIsFavourite(res?.favorite);
     setIsWatchList(res?.watchlist);
-  }, [category, id, params]);
+  }, [category, id]);
 
   const addToFavorite = useCallback(async () => {
     const data = {
@@ -46,9 +45,9 @@ const Details = () => {
       media_id: id,
       favorite: !isFavourite,
     };
-    await tmdbApi.maskAsStatus(id, "favorite", params, data);
+    await tmdbApi.maskAsStatus(id, "favorite", paramsSession, data);
     getStatusCard();
-  }, [category, getStatusCard, id, isFavourite, params]);
+  }, [category, getStatusCard, id, isFavourite]);
 
   const addToWatchList = useCallback(async () => {
     const data = {
@@ -56,14 +55,14 @@ const Details = () => {
       media_id: id,
       watchlist: !isWatchList,
     };
-    await tmdbApi.maskAsStatus(id, "watchlist", params, data);
+    await tmdbApi.maskAsStatus(id, "watchlist", paramsSession, data);
     getStatusCard();
-  }, [category, getStatusCard, id, isWatchList, params]);
+  }, [category, getStatusCard, id, isWatchList]);
 
   const getCreateLists = useCallback(async () => {
-    const res = await tmdbApi.getCreatedList(accountId, params);
+    const res = await tmdbApi.getCreatedList(accountId, paramsSession);
     setCreateList(res.results);
-  }, [params]);
+  }, []);
 
   const addToCreateList = useCallback(
     async (listId: any) => {
@@ -71,13 +70,13 @@ const Details = () => {
         const data = {
           media_id: id,
         };
-        await tmdbApi.addToCreateList(listId, params, data);
+        await tmdbApi.addToCreateList(listId, paramsSession, data);
         setAlert(true);
       } catch (error) {
         setErrorAlert(true);
       }
     },
-    [id, params]
+    [id]
   );
 
   useEffect(() => {
@@ -108,7 +107,9 @@ const Details = () => {
       document.removeEventListener("click", checkIfCloseOutside);
     };
   }, [openList]);
-
+  const handleRate = (e:any) => {
+    console.log(e);
+  }
   const listsAction = useMemo(() => {
     return [
       {
@@ -192,7 +193,13 @@ const Details = () => {
         onClick: () => {
           setRate(!rate);
         },
-        dropdown: "",
+        dropdown: (
+          <div className="rate">
+            <div className="rate-background">
+              <RateStar isRate={handleRate}/>
+            </div>
+          </div>
+        ),
       },
     ];
   }, [
@@ -208,6 +215,7 @@ const Details = () => {
     openMyCreateList,
     rate,
   ]);
+
   return (
     <>
       {item && (

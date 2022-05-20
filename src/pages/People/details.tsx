@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { category, tmdbApi } from "../../api/api";
 import Button from "../../components/button/Button";
-import MovieCard from "../../components/movie-card/MovieCard";
 import apiConfig from "../../utils/apiConfig";
 import "./person.scss";
 
