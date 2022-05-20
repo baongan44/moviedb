@@ -2,17 +2,14 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { tmdbApi } from "../../api/api";
 import { routes } from "../../utils";
-import { sessionId } from "../../utils/config";
+import { paramsSession, sessionId } from "../../utils/config";
 import "./mylists.scss";
 
 const CardList = ({ data, getList }: { data: any; getList?: any }) => {
   const history = useHistory();
   const handleDelete = async (e: any) => {
     e.stopPropagation();
-    const params = {
-      session_id: sessionId,
-    };
-    await tmdbApi.deleteList(data?.id, params);
+    await tmdbApi.deleteList(data?.id, paramsSession);
     getList();
   };
   return (

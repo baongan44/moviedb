@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { tmdbApi } from "../../api/api";
 import { accountId, sessionId } from "../../utils/config";
-import ModalConfirm from "../ModalConfirm/ModalConfirm";
 import CardList from "./CardList";
 import "./mylists.scss";
 

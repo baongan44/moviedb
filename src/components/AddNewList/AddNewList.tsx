@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { tmdbApi } from "../../api/api";
 import { sessionId } from "../../utils/config";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
@@ -56,7 +57,11 @@ const AddNewList = ({ onClose, handleSuccess }: Props) => {
         description: formValues.description,
       };
       await tmdbApi.createNewList(data, params);
-      // setSuccess(!success);
+      toast.success("Your list created successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        draggablePercent: 60,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -64,6 +69,7 @@ const AddNewList = ({ onClose, handleSuccess }: Props) => {
 
   return (
     <div className="addlist">
+      <ToastContainer />
       <div className="addlist-content">
         <div className="addlist-content__close" onClick={onClose}>
           <i className="bx bx-x"></i>

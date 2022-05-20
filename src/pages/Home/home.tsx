@@ -54,23 +54,8 @@ const Home = () => {
       setTime(timeType.week);
     }
   };
-  const alert = () => {
-    if (localStorage.getItem("login") === "CONNECTED") {
-      toast.success("Welcom to Milen Movies website", {
-        theme: "dark",
-        position: "top-right",
-        autoClose: 1000,
-        icon: false,
-        draggablePercent: 60,
-      });
-    }
-  };
-  useEffect(() => {
-    alert();
-  }, []);
   return (
     <>
-      <ToastContainer />
       <HeroSlide />
       <div className="container">
         <div className="section mb-3">

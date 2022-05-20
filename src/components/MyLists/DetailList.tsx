@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import { tmdbApi } from "../../api/api";
 import { routes } from "../../utils";
-import { sessionId } from "../../utils/config";
+import { paramsSession, sessionId } from "../../utils/config";
 import GradientBtn from "../button/gradientBtn";
 import ModalConfirm from "../ModalConfirm/ModalConfirm";
 import MovieCardEdit from "../movie-card/MovieCardEdit";
@@ -33,6 +34,11 @@ const DetailList = () => {
       };
       await tmdbApi.clearList(id, params, data);
       setOpenClear(false);
+      toast.success("Your list was cleared", {
+        position: "top-right",
+        autoClose: 2000,
+        draggablePercent: 60,
+      });
       getDetail();
     } catch (error) {
       console.log(error);
@@ -41,10 +47,7 @@ const DetailList = () => {
 
   const handleDelete = async () => {
     try {
-      const params = {
-        session_id: sessionId,
-      };
-      await tmdbApi.deleteList(id, params);
+      await tmdbApi.deleteList(id,paramsSession);
       setOpenDelete(false);
       history.push(`${routes.profile.event.lists.self}`);
     } catch (error) {
@@ -92,6 +95,7 @@ const DetailList = () => {
         description="Do you want clear all items in this list?"
         handleConfirm={handleClear}
       />
+      <ToastContainer />
     </div>
   );
 };

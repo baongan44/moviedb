@@ -102,7 +102,7 @@ const MovieCardEdit = ({
       </div>
       <div className="card-edit__content">
         <div className="card-edit__content__title">
-          <div className="rate">
+          <div className="card-edit__content__title-rate">
             <RangeCircle
               type="circle"
               percent={data?.vote_average * 10}

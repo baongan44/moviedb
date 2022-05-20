@@ -1,5 +1,6 @@
 import { accountId } from "./../utils/config";
 import { apiCall, routes } from "../utils";
+import apiConfig from "../utils/apiConfig";
 
 export const category: any = {
   movie: "movie",
@@ -152,7 +153,12 @@ export const tmdbApi = {
     return res;
   },
   deleteList: async (listId: any, params: any) => {
-    const res = await apiCall(`list/${listId}`, "DELETE", undefined, params);
+    const res = await apiCall(
+      `list/${listId}`,
+      "DELETE",
+      undefined,
+      params,
+    );
     return res;
   },
   getDetailList: async (listId: any) => {
@@ -174,7 +180,7 @@ export const tmdbApi = {
   },
   getRateMovie: async (type: any, accountId: any, params: any) => {
     const res = await apiCall(
-      `/account/${accountId}/rated/${type}`,
+      `account/${accountId}/rated/${type}`,
       "GET",
       undefined,
       params
@@ -182,10 +188,14 @@ export const tmdbApi = {
     return res;
   },
   setReview: async (type: any, id: any, body: any, params: any) => {
+    const res = await apiCall(`${type}/${id}/rating`, "POST", body, params);
+    return res;
+  },
+  deleteRate: async (type: any, id: any, params: any) => {
     const res = await apiCall(
-      `/${type}/${id}/rating`,
-      "POST",
-      body,
+      `${type}/${id}/rating`,
+      "DELETE",
+      undefined,
       params
     );
     return res;

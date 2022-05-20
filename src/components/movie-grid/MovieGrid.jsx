@@ -129,7 +129,7 @@ const MovieSearch = (props) => {
             {filter}
             <span>
               <i
-                class="bx bxs-down-arrow"
+                className="bx bxs-down-arrow"
                 style={{
                   transform: openFilter ? "rotateX(180deg)" : "rotateX(0deg)",
                 }}

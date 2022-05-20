@@ -183,11 +183,30 @@
 }
 
 .rate {
+    position: absolute;
+    min-width: 200px;
+    &::after {
+        content: "";
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        top: -30%;
+        left: 2%;
+        border: 10px solid;
+        border-color: transparent transparent $backgroundPopup transparent;
+    }
     &-background {
         background: $backgroundPopup;
         padding: 10px;
         border-radius: 5px;
         display: flex;
         align-items: center;
+        justify-content: center;
+    }
+    &-clear {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        z-index: 10;
     }
 }

@@ -1,6 +1,7 @@
 import { Rate } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import { tmdbApi } from "../../api/api";
 import { accountId, paramsSession } from "../../utils/config";
 
@@ -17,8 +18,7 @@ const RateStar = ({ isRate }: { isRate: any }) => {
     const data = res?.results;
     const rate = data?.find((ele: any) => ele.id === Number(id));
     setRateNum(rate?.rating / 2);
-    isRate(rateNum)
-  }, [category, id, isRate, rateNum]);
+  }, [category, id]);
 
   const getReview = useCallback(
     async (e) => {
@@ -33,17 +33,48 @@ const RateStar = ({ isRate }: { isRate: any }) => {
 
   useEffect(() => {
     getRateMovie();
-  }, [getRateMovie, rateNum]);
+    isRate(rateNum);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rateNum]);
+
+  const deteleRate = useCallback(async () => {
+    await tmdbApi.deleteRate(category, id, paramsSession);
+    getRateMovie();
+  }, [category, getRateMovie, id]);
 
   return (
-    <Rate
-      allowHalf
-      value={rateNum}
-      onChange={(e) => {
-        getReview(e);
-      }}
-    />
+    <RateWrapper>
+      <div
+        className="rate-clear"
+        onClick={(e) => {
+          e.stopPropagation();
+          deteleRate();
+        }}
+      >
+        <i className="bx bx-minus-circle"></i>
+      </div>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <Rate
+          style={{ zIndex: 10 }}
+          allowHalf
+          value={rateNum}
+          onChange={(e) => {
+            getReview(e);
+          }}
+        />
+      </div>
+    </RateWrapper>
   );
 };
 
 export default RateStar;
+
+const RateWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

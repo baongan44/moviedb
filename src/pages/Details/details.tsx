@@ -26,6 +26,7 @@ const Details = () => {
   const [isWatchList, setIsWatchList] = useState<boolean>(false);
   const [openMyCreateList, setOpenMyCreateList] = useState<boolean>(false);
   const [openList, setOpenList] = useState<boolean>(false);
+  const [openRate, setOpenRate] = useState<boolean>(false);
   const [createList, setCreateList] = useState(null as any);
   const [initValue, setInitValue] = useState("Choose Your List");
   const [alert, setAlert] = useState(false);
@@ -98,18 +99,30 @@ const Details = () => {
         openList &&
         refSelectCurrent.current &&
         !refSelectCurrent.current.contains(e.target)
-      ) {
+      ){
         setOpenList(false);
+      }
+      else if (
+        openRate &&
+        refSelectCurrent.current &&
+        !refSelectCurrent.current.contains(e.target)
+      ){
+        setOpenRate(false);
       }
     };
     document.addEventListener("click", checkIfCloseOutside);
     return () => {
       document.removeEventListener("click", checkIfCloseOutside);
     };
-  }, [openList]);
-  const handleRate = (e:any) => {
-    console.log(e);
-  }
+  }, [openList, openRate]);
+
+  const handleRate = (e: any) => {
+    if (e > 0) {
+      setRate(true);
+    } else {
+      setRate(false)
+    }
+  };
   const listsAction = useMemo(() => {
     return [
       {
@@ -191,12 +204,12 @@ const Details = () => {
         icon: rate ? "bx bxs-star" : "bx bx-star",
         color: rate ? "rgb(238,196,7)" : "unset",
         onClick: () => {
-          setRate(!rate);
+          setOpenRate(!openRate);
         },
         dropdown: (
-          <div className="rate">
+          <div className="rate" style={{ display: openRate ? "flex" : "none" }}>
             <div className="rate-background">
-              <RateStar isRate={handleRate}/>
+              <RateStar isRate={handleRate} />
             </div>
           </div>
         ),
@@ -213,6 +226,7 @@ const Details = () => {
     isWatchList,
     openList,
     openMyCreateList,
+    openRate,
     rate,
   ]);
 
@@ -329,7 +343,7 @@ const Details = () => {
 
 export default Details;
 
-const RangeCircle = styled(Progress)`
+export const RangeCircle = styled(Progress)`
   transition: transform 0.2s;
   & div {
     width: 60px !important;

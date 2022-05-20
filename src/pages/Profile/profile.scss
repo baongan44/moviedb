@@ -31,10 +31,29 @@
   margin-bottom: 50px;
   &-header {
     display: flex;
+    justify-content: space-between;
     transform: translate(10%, -70%);
-    gap: 50px;
     align-items: center;
     max-width: 1000px;
+    &__left,
+    &__right {
+      display: flex;
+      gap: 50px;
+      align-items: center;
+      transform: translateY(-10%);
+    }
+    &__right-content {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      span {
+        max-width: 50px;
+      }
+      &:first-child {
+        border-right: 1px solid #fff;
+        padding-right: 40px;
+      }
+    }
     &__circle {
       height: 200px;
       width: 200px;

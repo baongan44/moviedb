@@ -7,24 +7,21 @@ import React, {
 } from "react";
 import "./profile.scss";
 import bg from "../../assets/footer-bg.jpg";
-import {
-  Route,
-  Switch,
-  Redirect,
-  Link,
-  useLocation,
-} from "react-router-dom";
-import { routes } from "../../utils";
+import { Route, Switch, Redirect, Link, useLocation } from "react-router-dom";
+import { apiCall, routes } from "../../utils";
 import WatchList from "../../components/WatchList/WatchList";
 import MyLists from "../../components/MyLists/MyLists";
 import Favorite from "../../components/Favorite/Favorite";
 import { tmdbApi } from "../../api/api";
 import { AnimatePresence } from "framer-motion";
-import { sessionId } from "../../utils/config";
+import { accountId, paramsSession, sessionId } from "../../utils/config";
 import GradientBtn from "../../components/button/gradientBtn";
 import AddNewList from "../../components/AddNewList/AddNewList";
 import DetailList from "../../components/MyLists/DetailList";
 import { profileList } from "../../data/data";
+import { RangeCircle } from "../Details/details";
+import { ToastContainer } from "react-toastify";
+import apiConfig from "../../utils/apiConfig";
 
 const Profile = () => {
   const [data, setData] = useState(null as any);
@@ -39,6 +36,8 @@ const Profile = () => {
   const [sortBy, setSortBy] = useState(addListTime[0].name as string);
   const [openFilter, setOpenFilter] = useState(false);
   const [openSortBy, setOpenSortBy] = useState(false);
+  const [movieAverage, setMovieAverage] = useState(0 as any);
+  const [tvAverage, setTvAverage] = useState(0 as any);
   const { pathname } = useLocation();
   const active = profileList.findIndex((e) => e.path === pathname);
   const getAccount = useCallback(async () => {
@@ -57,9 +56,34 @@ const Profile = () => {
     setSortBy(event);
     setOpenSortBy(!openSortBy);
   };
+
+  const getRateList = useCallback(async () => {
+    const average = (arr: any) =>
+      arr.reduce((prev: number, curr: number) => prev + curr, 0) / arr.length;
+    const resMovie = await tmdbApi.getRateMovie(
+      "movies",
+      accountId,
+      paramsSession
+    );
+    const resTv = await tmdbApi.getRateMovie("tv", accountId, paramsSession);
+    var arrMovie: any = [];
+    var arrTv: any = [];
+    const dataMovie = resMovie.results;
+    const dataTv = resTv.results;
+    dataMovie?.map((ele: any) => {
+      return arrMovie.push(ele?.rating);
+    });
+    dataTv?.map((ele: any) => {
+      return arrTv.push(ele?.rating);
+    });
+    setMovieAverage(average(arrMovie).toFixed(1));
+    setTvAverage(average(arrTv).toFixed(1));
+  }, []);
+
   useEffect(() => {
     getAccount();
-  }, [getAccount]);
+    getRateList();
+  }, [getAccount, getRateList]);
 
   const handleProfileList = (event: string) => {
     localStorage.setItem("filter-status", event);
@@ -75,25 +99,55 @@ const Profile = () => {
       ></div>
       <div>
         <div className="profile-header">
-          <div className="profile-header__circle">
-            <i className="bx bxs-user"></i>
+          <div className="profile-header__left">
+            <div className="profile-header__circle">
+              <i className="bx bxs-user"></i>
+            </div>
+            <div className="profile-header__content">
+              <h1>{data?.username}</h1>
+              <div className="profile-header__option">
+                <ul>
+                  {profileList?.map((ele, i) => (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        handleProfileList(ele.title);
+                      }}
+                      className={`${i === active ? "active" : ""}`}
+                    >
+                      <Link to={ele.path}>{ele.name}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
-          <div className="profile-header__content">
-            <h1>{data?.username}</h1>
-            <div className="profile-header__option">
-              <ul>
-                {profileList?.map((ele, i) => (
-                  <li
-                    key={i}
-                    onClick={() => {
-                      handleProfileList(ele.title);
-                    }}
-                    className={`${i === active ? "active" : ""}`}
-                  >
-                    <Link to={ele.path}>{ele.name}</Link>
-                  </li>
-                ))}
-              </ul>
+          <div className="profile-header__right">
+            <div className="profile-header__right-content">
+              <RangeCircle
+                type="circle"
+                percent={movieAverage * 10}
+                strokeColor={{
+                  "100%": `${
+                    movieAverage * 10 > 70
+                      ? "rgb(28,149,90)"
+                      : "rgb(210,213,49)"
+                  }`,
+                }}
+              />
+              <span>Average Movie Score </span>
+            </div>
+            <div className="profile-header__right-content">
+              <RangeCircle
+                type="circle"
+                percent={tvAverage * 10}
+                strokeColor={{
+                  "100%": `${
+                    tvAverage * 10 > 70 ? "rgb(28,149,90)" : "rgb(210,213,49)"
+                  }`,
+                }}
+              />
+              <span>Average Tv Score </span>
             </div>
           </div>
         </div>
