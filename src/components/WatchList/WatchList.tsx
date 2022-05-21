@@ -1,3 +1,4 @@
+import { Pagination } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { tmdbApi } from "../../api/api";
 import { sessionId } from "../../utils/config";
@@ -10,11 +11,13 @@ interface Props {
 }
 const WatchList = ({ accountId, filter, sortBy }: Props) => {
   const [watchList, setWatchList] = useState(null as any);
+  const [page, setPage] = useState(1);
 
   const getWatchList = useCallback(async () => {
     const params = {
       session_id: sessionId,
       sort_by: sortBy === "DESC" ? "created_at.desc" : "created_at.asc",
+      page: page,
     };
     const res = await tmdbApi.getStatusList(
       accountId,
@@ -22,8 +25,8 @@ const WatchList = ({ accountId, filter, sortBy }: Props) => {
       filter?.toLowerCase(),
       params
     );
-    setWatchList(res?.results);
-  }, [accountId, filter, sortBy]);
+    setWatchList(res);
+  }, [accountId, filter, page, sortBy]);
 
   useEffect(() => {
     getWatchList();
@@ -31,7 +34,7 @@ const WatchList = ({ accountId, filter, sortBy }: Props) => {
 
   return (
     <div className="favorite-card">
-      {watchList?.map((movie: any, i: number) => (
+      {watchList?.results?.map((movie: any, i: number) => (
         <MovieCardEdit
           key={i}
           data={movie}
@@ -40,6 +43,17 @@ const WatchList = ({ accountId, filter, sortBy }: Props) => {
           getList={getWatchList}
         />
       ))}
+        {page > 1 && (
+        <div className="profile-pagination">
+          <Pagination
+            total={watchList?.total_pages}
+            current={page}
+            onChange={(page) => {
+              setPage(page);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

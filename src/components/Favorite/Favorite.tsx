@@ -1,3 +1,4 @@
+import { Pagination } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { tmdbApi } from "../../api/api";
 import { sessionId } from "../../utils/config";
@@ -11,10 +12,12 @@ interface Props {
 }
 const Favorite = ({ accountId, filter, sortBy }: Props) => {
   const [favoriteList, setFavoriteList] = useState(null as any);
+  const [page, setPage] = useState(1);
   const getFavoriteList = useCallback(async () => {
     const params = {
       session_id: sessionId,
       sort_by: sortBy === "DESC" ? "created_at.desc" : "created_at.asc",
+      page: page,
     };
     const res = await tmdbApi.getStatusList(
       accountId,
@@ -22,8 +25,8 @@ const Favorite = ({ accountId, filter, sortBy }: Props) => {
       filter?.toLowerCase(),
       params
     );
-    setFavoriteList(res?.results);
-  }, [accountId, filter, sortBy]);
+    setFavoriteList(res);
+  }, [accountId, filter, page, sortBy]);
 
   useEffect(() => {
     getFavoriteList();
@@ -31,7 +34,7 @@ const Favorite = ({ accountId, filter, sortBy }: Props) => {
 
   return (
     <div className="favorite-card">
-      {favoriteList?.map((movie: any, i: number) => (
+      {favoriteList?.results?.map((movie: any, i: number) => (
         <MovieCardEdit
           key={i}
           data={movie}
@@ -40,6 +43,17 @@ const Favorite = ({ accountId, filter, sortBy }: Props) => {
           getList={getFavoriteList}
         />
       ))}
+      {page > 1 && (
+        <div className="profile-pagination">
+          <Pagination
+            total={favoriteList?.total_pages}
+            current={page}
+            onChange={(page) => {
+              setPage(page);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -82,6 +82,7 @@ const Login = () => {
         position: "top-right",
         autoClose: 5000,
         draggablePercent: 60,
+        theme: "colored",
       });
     }
   };

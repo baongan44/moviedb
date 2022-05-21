@@ -1,6 +1,7 @@
 import { Progress } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { tmdbApi } from "../../api/api";
 import apiConfig from "../../utils/apiConfig";
@@ -18,7 +19,7 @@ const MovieCardEdit = ({
   filter: string;
   category?: any;
   getList: any;
-  listId?:any;
+  listId?: any;
 }) => {
   const type: string = filter === "Movies" ? "movie" : filter.toLowerCase();
   const [isFavourite, setIsFavourite] = useState(false);
@@ -44,6 +45,12 @@ const MovieCardEdit = ({
       session_id: sessionId,
     };
     await tmdbApi.maskAsStatus(data?.id, category, params, movieData);
+    toast.success("Remove successfully", {
+      theme: "dark",
+      position: "bottom-right",
+      autoClose: 3000,
+      draggablePercent: 60,
+    });
     getStatusCard();
     getList();
   }, [category, data?.id, filter, getList, getStatusCard, isFavourite]);

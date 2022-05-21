@@ -107,6 +107,12 @@
     z-index: 2;
     margin-top: -5%;
   }
+  &-pagination {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 3rem 0;
+  }
 }
 
 .filterList {

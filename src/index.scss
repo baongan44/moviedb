@@ -24,6 +24,7 @@ body {
     line-height: 1.5;
     background-color: $body-bg;
     color: $txt-color;
+    overflow-x: hidden;
     @include mobile {
         margin-bottom: 3rem;
     }
@@ -90,3 +91,33 @@ h5 {
 .Toastify__progress-bar--success {
     background: $linear-color-01 !important;
 }
+
+.ant-pagination-item {
+    font-weight: 600;
+    border-radius: 50%;
+    transition: ease-in-out 3s;
+    a {
+      background: $linear-color-01;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    &:hover {
+      background: $linear-color-01;
+      border: none !important;
+    }
+    &:hover a {
+      color: #fff !important;
+      background: unset;
+      -webkit-background-clip: unset;
+      -webkit-text-fill-color: unset;
+    }
+  }
+  .ant-pagination-item-ellipsis {
+    color: #fff !important;
+  }
+  .ant-pagination-item-link {
+    background: transparent !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+  }
+  

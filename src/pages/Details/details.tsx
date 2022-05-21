@@ -16,6 +16,7 @@ import { Alert, Progress, Rate } from "antd";
 import styled from "styled-components";
 import { accountId, paramsSession } from "../../utils/config";
 import RateStar from "../../components/Rate/RateStar";
+import { toast, ToastContainer } from "react-toastify";
 
 const Details = () => {
   const { category, id } = useParams<any>();
@@ -72,9 +73,19 @@ const Details = () => {
           media_id: id,
         };
         await tmdbApi.addToCreateList(listId, paramsSession, data);
-        setAlert(true);
+        toast.success("Add to list successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          draggablePercent: 60,
+          theme: 'dark',
+        })
       } catch (error) {
-        setErrorAlert(true);
+        toast.error("Your item was had in this list, please try another list", {
+          position: "top-right",
+          autoClose: 2000,
+          draggablePercent: 60,
+          theme: 'colored',
+        })
       }
     },
     [id]
@@ -99,14 +110,13 @@ const Details = () => {
         openList &&
         refSelectCurrent.current &&
         !refSelectCurrent.current.contains(e.target)
-      ){
+      ) {
         setOpenList(false);
-      }
-      else if (
+      } else if (
         openRate &&
         refSelectCurrent.current &&
         !refSelectCurrent.current.contains(e.target)
-      ){
+      ) {
         setOpenRate(false);
       }
     };
@@ -120,7 +130,7 @@ const Details = () => {
     if (e > 0) {
       setRate(true);
     } else {
-      setRate(false)
+      setRate(false);
     }
   };
   const listsAction = useMemo(() => {
@@ -325,16 +335,7 @@ const Details = () => {
               />
             </div>
           )}
-          {errorAlert && (
-            <div style={{ position: "fixed", top: "20%", right: "20px" }}>
-              <Alert
-                message="Already Had"
-                description="This item was add to your list already"
-                type="error"
-                closable
-              />
-            </div>
-          )}
+          <ToastContainer />
         </>
       )}
     </>

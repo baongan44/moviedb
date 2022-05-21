@@ -82,8 +82,8 @@ export const tmdbApi = {
     const res = await apiCall(`${category[cate]}/${id}`, "GET");
     return res;
   },
-  getPopularPersonLists: async (cate: string) => {
-    const res = await apiCall(`${category[cate]}/popular`, "GET");
+  getPopularPersonLists: async (cate: string, params?:any) => {
+    const res = await apiCall(`${category[cate]}/popular`, "GET", undefined, params);
     return res;
   },
   movieCreditEachPerson: async (id: string) => {

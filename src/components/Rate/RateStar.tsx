@@ -1,6 +1,7 @@
 import { Rate } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import styled from "styled-components";
 import { tmdbApi } from "../../api/api";
 import { accountId, paramsSession } from "../../utils/config";
@@ -26,6 +27,11 @@ const RateStar = ({ isRate }: { isRate: any }) => {
         value: e * 2,
       };
       await tmdbApi.setReview(category, id, data, paramsSession);
+      toast.success("Rating was success", {
+        position: "top-right",
+        autoClose: 2000,
+        draggablePercent: 60,
+      });
       getRateMovie();
     },
     [category, getRateMovie, id]
@@ -43,31 +49,33 @@ const RateStar = ({ isRate }: { isRate: any }) => {
   }, [category, getRateMovie, id]);
 
   return (
-    <RateWrapper>
-      <div
-        className="rate-clear"
-        onClick={(e) => {
-          e.stopPropagation();
-          deteleRate();
-        }}
-      >
-        <i className="bx bx-minus-circle"></i>
-      </div>
-      <div
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <Rate
-          style={{ zIndex: 10 }}
-          allowHalf
-          value={rateNum}
-          onChange={(e) => {
-            getReview(e);
+    <>
+      <RateWrapper>
+        <div
+          className="rate-clear"
+          onClick={(e) => {
+            e.stopPropagation();
+            deteleRate();
           }}
-        />
-      </div>
-    </RateWrapper>
+        >
+          <i className="bx bx-minus-circle"></i>
+        </div>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <Rate
+            style={{ zIndex: 10 }}
+            allowHalf
+            value={rateNum}
+            onChange={(e) => {
+              getReview(e);
+            }}
+          />
+        </div>
+      </RateWrapper>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { category, tmdbApi } from "../../api/api";
 import Button from "../../components/button/Button";
 import apiConfig from "../../utils/apiConfig";
 import "./person.scss";
+import avatar from "../../assets/avatar.png";
 
 const PersonDetails = () => {
   const [info, setInfo] = useState(null as any);
@@ -29,9 +30,11 @@ const PersonDetails = () => {
       <div
         className="banner"
         style={{
-          backgroundImage: `url(${apiConfig.originalImage(
+          backgroundImage: `url(${
             info?.profile_path
-          )})`,
+              ? apiConfig.w500Image(info?.profile_path)
+              : avatar
+          })`,
         }}
       ></div>
       <div className="mb-3 person-content container">
@@ -39,9 +42,11 @@ const PersonDetails = () => {
           <div
             className="person-content__poster__img"
             style={{
-              backgroundImage: `url(${apiConfig.originalImage(
+              backgroundImage: `url(${
                 info?.profile_path
-              )})`,
+                  ? apiConfig.w500Image(info?.profile_path)
+                  : avatar
+              })`,
             }}
           ></div>
         </div>
@@ -49,7 +54,7 @@ const PersonDetails = () => {
           <h1 className="title">{info?.name}</h1>
           <div className="bio">
             <span>Biography</span>
-            <p>{info?.biography}</p>
+            <p>{info?.biography ? info?.biography : `We don't have a biography for ${info?.name}`}</p>
           </div>
           <div className="born">
             <div>

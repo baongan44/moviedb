@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import "./profile.scss";
@@ -21,7 +22,7 @@ import DetailList from "../../components/MyLists/DetailList";
 import { profileList } from "../../data/data";
 import { RangeCircle } from "../Details/details";
 import { ToastContainer } from "react-toastify";
-import apiConfig from "../../utils/apiConfig";
+import { Pagination } from "antd";
 
 const Profile = () => {
   const [data, setData] = useState(null as any);
@@ -40,6 +41,7 @@ const Profile = () => {
   const [tvAverage, setTvAverage] = useState(0 as any);
   const { pathname } = useLocation();
   const active = profileList.findIndex((e) => e.path === pathname);
+  const refSelectCurrent: any = useRef();
   const getAccount = useCallback(async () => {
     const params = {
       session_id: sessionId,
@@ -89,8 +91,32 @@ const Profile = () => {
     localStorage.setItem("filter-status", event);
   };
 
+  useEffect(() => {
+    const checkIfCloseOutside = (e: any) => {
+      if (
+        openFilter &&
+        refSelectCurrent.current &&
+        !refSelectCurrent.current.contains(e.target)
+      ) {
+        setOpenFilter(false);
+      }
+      else if (
+        openSortBy &&
+        refSelectCurrent.current &&
+        !refSelectCurrent.current.contains(e.target)
+      ) {
+        setOpenSortBy(false);
+      }
+    };
+    document.addEventListener("click", checkIfCloseOutside);
+    return () => {
+      document.removeEventListener("click", checkIfCloseOutside);
+    };
+  }, [openFilter, openSortBy]);
+
   return (
     <div className="profile">
+      <ToastContainer />
       <div
         className="banner"
         style={{
@@ -188,7 +214,7 @@ const Profile = () => {
                             ></i>
                           </span>
                         </span>
-                        <div style={{ display: openFilter ? "block" : "none" }}>
+                        <div style={{ display: openFilter ? "block" : "none" }}  ref={refSelectCurrent}>
                           <ul>
                             {filterList?.map((ele, i) => (
                               <li key={i} onClick={() => handleFilter(ele)}>
@@ -219,7 +245,7 @@ const Profile = () => {
                             ></i>
                           </span>
                         </span>
-                        <div style={{ display: openSortBy ? "block" : "none" }}>
+                        <div style={{ display: openSortBy ? "block" : "none" }}  ref={refSelectCurrent}>
                           <ul>
                             {addListTime?.map((ele, i) => (
                               <li
@@ -278,6 +304,7 @@ const Profile = () => {
             </Suspense>
           </div>
         </div>
+       
       </div>
       {newList && <AddNewList onClose={() => openPopupNewList(false)} />}
     </div>
