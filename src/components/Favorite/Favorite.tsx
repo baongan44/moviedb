@@ -48,6 +48,8 @@ const Favorite = ({ accountId, filter, sortBy }: Props) => {
           <Pagination
             total={favoriteList?.total_pages}
             current={page}
+            defaultPageSize={10}
+            showSizeChanger={false}
             onChange={(page) => {
               setPage(page);
             }}

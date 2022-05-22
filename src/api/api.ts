@@ -82,8 +82,13 @@ export const tmdbApi = {
     const res = await apiCall(`${category[cate]}/${id}`, "GET");
     return res;
   },
-  getPopularPersonLists: async (cate: string, params?:any) => {
-    const res = await apiCall(`${category[cate]}/popular`, "GET", undefined, params);
+  getPopularPersonLists: async (cate: string, params?: any) => {
+    const res = await apiCall(
+      `${category[cate]}/popular`,
+      "GET",
+      undefined,
+      params
+    );
     return res;
   },
   movieCreditEachPerson: async (id: string) => {
@@ -153,12 +158,7 @@ export const tmdbApi = {
     return res;
   },
   deleteList: async (listId: any, params: any) => {
-    const res = await apiCall(
-      `list/${listId}`,
-      "DELETE",
-      undefined,
-      params,
-    );
+    const res = await apiCall(`list/${listId}`, "DELETE", undefined, params);
     return res;
   },
   getDetailList: async (listId: any) => {
@@ -195,6 +195,33 @@ export const tmdbApi = {
     const res = await apiCall(
       `${type}/${id}/rating`,
       "DELETE",
+      undefined,
+      params
+    );
+    return res;
+  },
+  getRegions: async (params?: any) => {
+    const res = await apiCall(
+      `configuration/languages`,
+      "GET",
+      undefined,
+      params
+    );
+    return res;
+  },
+  getKeywordRecommend: async (type: any, id: any, params?: any) => {
+    const res = await apiCall(
+      `${type}/${id}/keywords`,
+      "GET",
+      undefined,
+      params
+    );
+    return res;
+  },
+  getMediaSocial: async (type: any, id: any, params?: any) => {
+    const res = await apiCall(
+      `${type}/${id}/external_ids`,
+      "GET",
       undefined,
       params
     );

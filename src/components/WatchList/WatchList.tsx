@@ -43,11 +43,13 @@ const WatchList = ({ accountId, filter, sortBy }: Props) => {
           getList={getWatchList}
         />
       ))}
-        {page > 1 && (
+      {page > 1 && (
         <div className="profile-pagination">
           <Pagination
             total={watchList?.total_pages}
             current={page}
+            defaultPageSize={10}
+            showSizeChanger={false}
             onChange={(page) => {
               setPage(page);
             }}

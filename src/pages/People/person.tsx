@@ -32,12 +32,11 @@ const Person = () => {
           ))}
           {/* {page < totalPage ? ( */}
           <div className="person-list__loadmore">
-            {/* <OutlineButton className="small">
-                Load more
-              </OutlineButton> */}
             <Pagination
               total={person?.total_pages}
               current={numberPage}
+              defaultPageSize={10}
+              showSizeChanger={false}
               onChange={(page) => {
                 setNumberPage(page);
               }}

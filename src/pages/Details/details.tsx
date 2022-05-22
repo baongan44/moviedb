@@ -17,6 +17,7 @@ import styled from "styled-components";
 import { accountId, paramsSession } from "../../utils/config";
 import RateStar from "../../components/Rate/RateStar";
 import { toast, ToastContainer } from "react-toastify";
+import InfoList from "./infoList";
 
 const Details = () => {
   const { category, id } = useParams<any>();
@@ -77,15 +78,15 @@ const Details = () => {
           position: "top-right",
           autoClose: 2000,
           draggablePercent: 60,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
       } catch (error) {
         toast.error("Your item was had in this list, please try another list", {
           position: "top-right",
           autoClose: 2000,
           draggablePercent: 60,
-          theme: 'colored',
-        })
+          theme: "colored",
+        });
       }
     },
     [id]
@@ -316,8 +317,12 @@ const Details = () => {
             </div>
           </div>
           <div className="container">
-            <div className="section mb-3">
-              <VideoList id={item.id} />
+            <div className="section mb-3 video-content">
+              {/* <div>Info</div> */}
+              <div className="video-content__trailer">
+                <VideoList id={item.id} />
+              </div>
+              <InfoList data={item} />
             </div>
             <div className="section mb-3">
               <div className="section__header mb-2">
