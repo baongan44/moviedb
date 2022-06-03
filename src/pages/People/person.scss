@@ -1,240 +1,233 @@
 @use "../../scss/" as *;
-
 .person-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin: auto;
-  justify-content: center;
-  cursor: pointer;
-  &-item {
-    height: 380px;
-    width: 250px;
-    background: #0f151e;
-    backdrop-filter: blur(4px);
-    box-shadow: $box-shadow-2;
-    $border-radius: 10px;
-    border-radius: $border-radius;
-    transition: all 0.2s ease 0s;
-    position: relative;
-    top: 0px;
-    overflow: hidden;
-    &__image {
-      height: 75%;
-      width: 100%;
-      & img {
-        height: 100%;
-        width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: auto;
+    justify-content: center;
+    cursor: pointer;
+    &-item {
+        height: 380px;
+        width: 250px;
+        background: #0f151e;
+        backdrop-filter: blur(4px);
+        box-shadow: $box-shadow-2;
+        $border-radius: 10px;
         border-radius: $border-radius;
-      }
+        transition: all 0.2s ease 0s;
+        position: relative;
+        top: 0px;
+        overflow: hidden;
+        &__image {
+            height: 75%;
+            width: 100%;
+            & img {
+                height: 100%;
+                width: 100%;
+                border-radius: $border-radius;
+            }
+        }
+        &__info {
+            padding: 10px;
+            i {
+                font-size: 16px;
+                margin-right: 10px;
+                color: #fff;
+            }
+            span {
+                font-size: 16px;
+                font-weight: 600;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+            }
+            &-content {
+                div {
+                    font-size: 13px;
+                    color: #777e90;
+                }
+            }
+        }
+        &__biography {
+            position: absolute;
+            top: -75%;
+            height: 75%;
+            border-radius: $border-radius;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            padding: 20px 10px;
+            object-fit: cover;
+            p {
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 12;
+            }
+        }
+        &:hover {
+            box-shadow: rgba(203, 71, 54, 0.3) 0px 0px 10px;
+            top: -5px;
+        }
+        &:hover &__biography {
+            top: 0;
+            transition: 0.2s linear;
+            opacity: 1;
+        }
+    }
+    &__loadmore {
+        margin: 3rem;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.banner {
+    height: 50vh;
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        @include overlay();
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background-image: linear-gradient(to top, $body-bg, rgba($black, 0));
+    }
+}
+
+.person-content {
+    @include flex(flex-start, flex-start);
+    max-width: 1260px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -200px;
+    position: relative;
+    padding: 0 2rem;
+    &__poster {
+        flex: 1;
+        @include mobile {
+            display: none;
+        }
+        &__img {
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            border-radius: $border-radius;
+            padding-top: 165%;
+        }
     }
     &__info {
-      padding: 10px;
-      i {
-        font-size: 16px;
-        margin-right: 10px;
-        color: #fff;
-      }
-      span {
-        font-size: 16px;
-        font-weight: 600;
-        display: -webkit-box;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-      }
-      &-content {
-        div {
-          font-size: 13px;
-          color: #777e90;
-        }
-      }
-    }
-    &__biography {
-      position: absolute;
-      top: -75%;
-      height: 75%;
-      border-radius: $border-radius;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      padding: 20px 10px;
-      object-fit: cover;
-      p {
-        display: -webkit-box;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 12;
-      }
-    }
-    &:hover {
-      box-shadow: rgba(203, 71, 54, 0.3) 0px 0px 10px;
-      top: -5px;
-    }
-    &:hover &__biography {
-      top: 0;
-      transition: 0.2s linear;
-      opacity: 1;
-    }
-  }
-  &__loadmore {
-    margin: 3rem;
-  }
-}
-.banner {
-  height: 50vh;
-  position: relative;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    @include overlay();
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background-image: linear-gradient(to top, $body-bg, rgba($black, 0));
-  }
-}
-.person-content {
-  @include flex(flex-start, flex-start);
-  max-width: 1260px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: -200px;
-  position: relative;
-  padding: 0 2rem;
-
-  &__poster {
-    flex: 1;
-
-    @include mobile {
-      display: none;
-    }
-
-    &__img {
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      border-radius: $border-radius;
-      padding-top: 165%;
-    }
-  }
-  &__info {
-    width: 70%;
-    padding-left: 2rem;
-    position: relative;
-    margin-top: 2rem;
-    @include mobile {
-      width: 100%;
-      padding-left: 0;
-    }
-
-    & > * {
-      margin-bottom: 2rem;
-    }
-
-    .title {
-      font-size: 3rem;
-      line-height: 1;
-    }
-    .bio {
-      & span {
-        font-size: 1rem;
-        font-weight: 600;
-      }
-      & p {
-        margin-top: 10px;
-      }
-    }
-    .born {
-      display: flex;
-      gap: 50px;
-      & div {
-        align-items: center;
-        display: flex;
-      }
-      & i {
-        font-size: 1.5rem;
-        margin-right: 10px;
-      }
-    }
-    .movies-title {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    .profile-img,
-    .movies {
-      display: flex;
-      gap: 10px;
-      overflow: auto;
-      padding-bottom: 10px;
-      margin-top: 10px;
-      &::-webkit-scrollbar {
-        height: 5px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: transparent;
-        border-radius: 10px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: rgba($color: #a8a7a7, $alpha: 0.4);
-        opacity: 0;
-        border-radius: 10px;
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        border-radius: 10px;
-        opacity: 1;
-      }
-      .img {
-        width: 150px;
-        height: 200px;
-        border-radius: 5px;
+        width: 70%;
+        padding-left: 2rem;
         position: relative;
-        transition: 0.3s ease;
-        & img {
-          height: 100%;
-          width: 100%;
+        margin-top: 2rem;
+        @include mobile {
+            width: 100%;
+            padding-left: 0;
         }
-        & div {
-          position: absolute;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          transition: opacity 0.3s ease;
-          background: rgba($color: #000000, $alpha: 0.6);
-          display: none;
-          & button {
-            padding: 0.2rem 1.5rem;
-            transform: scale(0);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-          }
-          &:hover button {
-            transform: scale(1);
-          }
+        &>* {
+            margin-bottom: 2rem;
         }
-        &:hover div {
-          display: flex;
+        .title {
+            font-size: 3rem;
+            line-height: 1;
         }
-      }
+        .bio {
+            & span {
+                font-size: 1rem;
+                font-weight: 600;
+            }
+            & p {
+                margin-top: 10px;
+            }
+        }
+        .born {
+            display: flex;
+            gap: 50px;
+            & div {
+                align-items: center;
+                display: flex;
+            }
+            & i {
+                font-size: 1.5rem;
+                margin-right: 10px;
+            }
+        }
+        .movies-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .profile-img,
+        .movies {
+            display: flex;
+            gap: 10px;
+            overflow: auto;
+            padding-bottom: 10px;
+            margin-top: 10px;
+            &::-webkit-scrollbar {
+                height: 5px;
+            }
+            &::-webkit-scrollbar-track {
+                background: transparent;
+                border-radius: 10px;
+            }
+            &::-webkit-scrollbar-thumb {
+                background: rgba($color: #a8a7a7, $alpha: 0.4);
+                opacity: 0;
+                border-radius: 10px;
+            }
+            &::-webkit-scrollbar-thumb:hover {
+                border-radius: 10px;
+                opacity: 1;
+            }
+            .img {
+                width: 150px;
+                height: 200px;
+                border-radius: 5px;
+                position: relative;
+                transition: 0.3s ease;
+                & img {
+                    height: 100%;
+                    width: 100%;
+                }
+                & div {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: opacity 0.3s ease;
+                    background: rgba($color: #000000, $alpha: 0.6);
+                    display: none;
+                    & button {
+                        padding: 0.2rem 1.5rem;
+                        transform: scale(0);
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    }
+                    &:hover button {
+                        transform: scale(1);
+                    }
+                }
+                &:hover div {
+                    display: flex;
+                }
+            }
+        }
     }
-  }
 }

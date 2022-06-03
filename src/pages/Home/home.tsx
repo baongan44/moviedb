@@ -54,19 +54,8 @@ const Home = () => {
       setTime(timeType.week);
     }
   };
-  useEffect(() => {
-    if(localStorage.getItem("login") === "CONNECTED") {
-      toast.success("Welcom to 'Milen Movie'", {
-        position: "top-right",
-        autoClose: 5000,
-        draggablePercent: 60,
-        theme: 'dark',
-      })
-    }
-  })
   return (
     <>
-      <ToastContainer />
       <HeroSlide />
       <div className="container">
         <div className="section mb-3">

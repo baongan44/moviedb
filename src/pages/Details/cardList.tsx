@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams,useHistory } from "react-router-dom";
 import { tmdbApi } from "../../api/api";
+import { routes } from "../../utils";
 import apiConfig from "../../utils/apiConfig";
 
 interface Props {
@@ -11,6 +12,7 @@ const CastList = (props: Props) => {
   const { category } = useParams<any>();
   const [casts, setCasts] = useState([]);
   const { id } = props;
+  const history = useHistory();
   useEffect(() => {
     const getCredits = async () => {
       const res = await tmdbApi.credits(category, id);
@@ -21,7 +23,7 @@ const CastList = (props: Props) => {
   return (
     <div className="casts">
       {casts.map((item: any, i) => (
-        <div key={i} className="casts__item">
+        <div key={i} className="casts__item" onClick={() => history.push(`/person/details/${item?.id}`)}>
           <div
             className="casts__item__img"
             style={{

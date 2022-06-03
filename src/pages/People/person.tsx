@@ -30,21 +30,21 @@ const Person = () => {
           {person?.results?.map((ele: any, i: number) => (
             <PersonCard key={i} data={ele} id={ele.id} />
           ))}
-          {/* {page < totalPage ? ( */}
-          <div className="person-list__loadmore">
-            <Pagination
-              total={person?.total_pages}
-              current={numberPage}
-              defaultPageSize={10}
-              showSizeChanger={false}
-              onChange={(page) => {
-                setNumberPage(page);
-              }}
-            />
-          </div>
-          {/* ) : null} */}
         </div>
       </div>
+      {/* {page < totalPage ? ( */}
+      <div className="person-list__loadmore">
+        <Pagination
+          total={person?.total_pages}
+          current={numberPage}
+          defaultPageSize={10}
+          showSizeChanger={false}
+          onChange={(page) => {
+            setNumberPage(page);
+          }}
+        />
+      </div>
+      {/* ) : null} */}
     </>
   );
 };
